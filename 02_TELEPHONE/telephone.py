@@ -21,9 +21,9 @@ def process(line):
     telephoneNums.push(line)
     
     if (isValid(line)):
+        if (isDupe(line)):
+            print duplicateFormat(line)
         print standardFormat(line)
-    elif (isDupe(line)):
-        print duplicateFormat(line)
     else:
         print invalidFormat(line)
 
