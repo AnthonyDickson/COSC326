@@ -1,0 +1,1 @@
+COSC326 Summer School 2018, Individual Work.
