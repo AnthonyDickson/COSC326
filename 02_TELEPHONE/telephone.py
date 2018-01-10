@@ -236,8 +236,6 @@ class TelephoneNumber:
     def isValid(self):
         """Check if phone number is valid and return True if valid, false
         otherwise.
-
-        Side effects: area_code and number will be set if number is valid.
         """       
         if (not self.has_valid_code() or not self.has_valid_length()):
             return False
@@ -252,8 +250,7 @@ class TelephoneNumber:
         return True
 
     def has_valid_code(self):
-        """Check if the phone number has a valid code.
-        """
+        """Check if the phone number has a valid code."""
         # Check if number has been input with formatting, e.g 03 444-1234.
         if self.original.isdigit():
             self.digits = self.original
