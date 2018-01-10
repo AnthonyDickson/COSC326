@@ -222,7 +222,7 @@ class TelephoneNumber:
                 break
 
         # Get the formatted string.
-        if (self.isValid()):
+        if (self.is_valid()):
             if (self.is_duplicate()):
                 self.formatted = self.duplicate_format()
             else:
@@ -233,7 +233,7 @@ class TelephoneNumber:
         # Add the phone number to the phonebook so we can check for duplicates later.
         TelephoneNumber.phonebook.add(self.digits)
 
-    def isValid(self):
+    def is_valid(self):
         """Check if phone number is valid and return True if valid, false
         otherwise.
         """       
