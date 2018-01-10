@@ -132,6 +132,13 @@ Tests
 
 >>> print(TelephoneNumber('0800 TWOOFME'))
 0800 896 6363 DUP
+
+***** Test hyphens ***** 
+>>> print(TelephoneNumber('03 789-0123'))
+03 789 0123
+
+>>> print(TelephoneNumber('03-789 0124'))
+03-789 0124 INV
 """
 
 import fileinput
