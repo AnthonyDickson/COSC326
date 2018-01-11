@@ -78,7 +78,7 @@ class TelephoneNumber:
         return re.sub("[^0-9]", "", s) # Strip non-numerical values.
 
     def __init__(self, ph_num):
-        self.original = ph_num.rstrip()
+        self.original = ph_num.strip()
         self.formatted = ''
         self.digits = ''
         self.code = ''
@@ -93,7 +93,10 @@ class TelephoneNumber:
         
         # Get the code and number parts of the phone number.
         for code in TelephoneNumber.valid_codes:
-            if self.digits[:len(code)] == code:
+            front_numbers = self.original.split(' ')[0]
+            # Strip paranthesis so we can check the code easily.
+            front_numbers = re.sub("[()]", '', front_numbers)
+            if front_numbers[:len(code)] == code:
                 self.code = code
                 self.number = self.digits[len(code):]
                 break
