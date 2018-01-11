@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-"""Telephone.py
-Read in a list of telephone numbers, check whether each number is valid,
-and output the (correctly) formatted numbers.
+"""telephone.py
+Read in a list of telephone numbers from stdin, check whether each number is valid,
+and output the formatted numbers in the order they were added.
 
 Author: Anthony Dickson
 
@@ -72,6 +72,9 @@ Tests
 
 >>> print(TelephoneNumber('0800 IMWAYTOOLONG'))
 0800 IMWAYTOOLONG INV
+
+>>> print(TelephoneNumber('02 123 4567'))
+02 123 4567 INV
 """
 
 import fileinput
@@ -82,12 +85,17 @@ class TelephoneNumber:
     formatting.
     """
 
-    # Keeps track of original phone numbers across all instances.
+    """Keep track of unqiue phone numbers."""
     phonebook = set() 
 
-    valid_codes = ['0508', '0800', '0900', '021', '022', '025', '027', 
-                   '02', '03', '04', '06', '07', '09']
+    """List valid codes."""
+    initial_codes = ['0508', '0800', '0900']
+    mobile_codes = ['021', '022', '025', '027']
+    area_codes = ['02', '03', '04', '06', '07', '09']
+    
+    valid_codes = initial_codes + mobile_codes + area_codes
 
+    """Valid phone number length grouped by code."""
     valid_lengths = {
         '0508'  : [ 6 ], '0800' : [ 6, 7 ], 
         '0900'  : [ 5 ], '021'  : [ 6, 7, 8 ], 
@@ -97,10 +105,6 @@ class TelephoneNumber:
         '06'    : [ 7 ], '07'   : [ 7 ], 
         '09'    : [ 7 ]
     }
-
-    initial_codes = valid_codes[:3]
-    area_codes = valid_codes[3:7]
-    mobile_codes = valid_codes[7:]
 
     keypad_letter_groupings = ['ABC', 'DEF', 'GHI', 'JKL', 'MNO', 'PQRS', 'TUV', 
                                'WXYZ']
@@ -113,10 +117,13 @@ class TelephoneNumber:
     @staticmethod
     def replace_letters_with_nums(s):
         """Replace uppercase letters with the corresponding numbers."""
-        if s == '': # Stop case
+        if s == '':
             return ''
 
-        if not s.isupper(): # Only uppercase letters are valid to be converted.
+        # We do not need to do anything to the string if it does not contain 
+        # any uppercase letters or if there is a mixture of 
+        # lowercase/uppercase (invalid).
+        if not s.isupper():
             return s
 
         c = s[0]
@@ -138,10 +145,10 @@ class TelephoneNumber:
 
         s = TelephoneNumber.replace_letters_with_nums(s)
 
-        return re.sub("[^0-9]", "", s) # Strip non-numbers and return.
+        return re.sub("[^0-9]", "", s) # Strip non-numerical values.
 
     def __init__(self, ph_num):
-        self.original = ph_num.rstrip()
+        self.original = ph_num.strip()
         self.formatted = ''
         self.digits = ''
         self.code = ''
@@ -156,7 +163,10 @@ class TelephoneNumber:
         
         # Get the code and number parts of the phone number.
         for code in TelephoneNumber.valid_codes:
-            if self.digits[:len(code)] == code:
+            front_numbers = self.original.split(' ')[0]
+            # Strip paranthesis so we can check the code easily.
+            front_numbers = re.sub("[()]", '', front_numbers)
+            if front_numbers[:len(code)] == code:
                 self.code = code
                 self.number = self.digits[len(code):]
                 break
@@ -170,7 +180,7 @@ class TelephoneNumber:
         else:
             self.formatted = self.invalid_format()
 
-        # Add the phone number to the phonebook so we can check for duplicates later.
+        # Keep track of added phone numbers so we can check for duplicates later.
         TelephoneNumber.phonebook.add(self.digits)
 
     def is_valid(self):
