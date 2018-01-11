@@ -1,77 +1,10 @@
 #!/usr/bin/env python
 
-"""Telephone.py
-Read in a list of telephone numbers, check whether each number is valid,
-and output the (correctly) formatted numbers.
+"""telephone.py
+Read in a list of telephone numbers from stdin, check whether each number is valid,
+and output the formatted numbers in the order they were added.
 
 Author: Anthony Dickson
-
-Tests
-***** Test code special cases ***** 
->>> print(TelephoneNumber('02 309-1234'))
-02 309-1234 INV
-
->>> print(TelephoneNumber('03 923 4567'))
-03 923 4567
-
->>> print(TelephoneNumber('04 9234 5678'))
-04 9234 5678 INV
-
->>> print(TelephoneNumber('06 900 4567'))
-06 900 4567 INV
-
->>> print(TelephoneNumber('07 911 4567'))
-07 911 4567 INV
-
->>> print(TelephoneNumber('09 999 4567'))
-09 999 4567 INV
-
->>> print(TelephoneNumber('021 123 456'))
-021 123 456
-
->>> print(TelephoneNumber('021 123 4567'))
-021 123 4567
-
->>> print(TelephoneNumber('021 1234 5678'))
-021 1234 5678
-
->>> print(TelephoneNumber('021 1234 56789'))
-021 1234 56789 INV
-
->>> print(TelephoneNumber('022 123 4567'))
-022 123 4567
-
->>> print(TelephoneNumber('022 123 456'))
-022 123 456 INV
-
->>> print(TelephoneNumber('027 123 4567'))
-027 123 4567
-
->>> print(TelephoneNumber('027 123 456'))
-027 123 456 INV
-
->>> print(TelephoneNumber('025 123 456'))
-027 412 3456
-
->>> print(TelephoneNumber('025 123 4567'))
-025 123 4567 INV
-
-***** Test numbers with paranthesis ***** 
->>> print(TelephoneNumber('(021) 123 45670'))
-021 1234 5670
-
->>> print(TelephoneNumber('(0800) 4BRACKETS'))
-0800 427 2253
-
-***** Test numbers with letters ***** 
->>> print(TelephoneNumber('0800 4PIPELINE'))
-0800 474 7354
-
->>> print(TelephoneNumber('0800 TOGOGO'))
-0800 864 646
-
->>> print(TelephoneNumber('0800 IMWAYTOOLONG'))
-0800 IMWAYTOOLONG INV
 """
 
 import fileinput
@@ -82,12 +15,17 @@ class TelephoneNumber:
     formatting.
     """
 
-    # Keeps track of original phone numbers across all instances.
+    """Keep track of unqiue phone numbers."""
     phonebook = set() 
 
-    valid_codes = ['0508', '0800', '0900', '021', '022', '025', '027', 
-                   '02', '03', '04', '06', '07', '09']
+    """List valid codes."""
+    initial_codes = ['0508', '0800', '0900']
+    mobile_codes = ['021', '022', '025', '027']
+    area_codes = ['02', '03', '04', '06', '07', '09']
+    
+    valid_codes = initial_codes + mobile_codes + area_codes
 
+    """Valid phone number length grouped by code."""
     valid_lengths = {
         '0508'  : [ 6 ], '0800' : [ 6, 7 ], 
         '0900'  : [ 5 ], '021'  : [ 6, 7, 8 ], 
@@ -98,25 +36,24 @@ class TelephoneNumber:
         '09'    : [ 7 ]
     }
 
-    initial_codes = valid_codes[:3]
-    area_codes = valid_codes[3:7]
-    mobile_codes = valid_codes[7:]
-
     keypad_letter_groupings = ['ABC', 'DEF', 'GHI', 'JKL', 'MNO', 'PQRS', 'TUV', 
                                'WXYZ']
 
     letter_num_conversion_chart = {
-        'ABC'   : 2,  'DEF' : 3,  'GHI' : 4,  'JKL' : 5,  'MNO' : 6, 
+        'ABC'   : 2, 'DEF'  : 3,  'GHI' : 4,  'JKL' : 5,  'MNO' : 6, 
         'PQRS'  : 7, 'TUV'  : 8,  'WXYZ': 9
     }
 
     @staticmethod
     def replace_letters_with_nums(s):
         """Replace uppercase letters with the corresponding numbers."""
-        if s == '': # Stop case
+        if s == '':
             return ''
 
-        if not s.isupper(): # Only uppercase letters are valid to be converted.
+        # We do not need to do anything to the string if it does not contain 
+        # any uppercase letters or if there is a mixture of 
+        # lowercase/uppercase (invalid).
+        if not s.isupper():
             return s
 
         c = s[0]
@@ -138,7 +75,7 @@ class TelephoneNumber:
 
         s = TelephoneNumber.replace_letters_with_nums(s)
 
-        return re.sub("[^0-9]", "", s) # Strip non-numbers and return.
+        return re.sub("[^0-9]", "", s) # Strip non-numerical values.
 
     def __init__(self, ph_num):
         self.original = ph_num.rstrip()
@@ -170,7 +107,7 @@ class TelephoneNumber:
         else:
             self.formatted = self.invalid_format()
 
-        # Add the phone number to the phonebook so we can check for duplicates later.
+        # Keep track of added phone numbers so we can check for duplicates later.
         TelephoneNumber.phonebook.add(self.digits)
 
     def is_valid(self):
@@ -190,17 +127,7 @@ class TelephoneNumber:
         return True
 
     def has_valid_code(self):
-        """Check if the phone number has a valid code.
-
-        >>> print(TelephoneNumber('(021)123450'))
-        (021)123450 INV
-
-        >>> print(TelephoneNumber('03 789-0123'))
-        03 789 0123
-
-        >>> print(TelephoneNumber('03-789 0124'))
-        03-789 0124 INV
-        """
+        """Check if the phone number has a valid code."""
         # Check if number has been input with formatting or not.
         if not self.original.isdigit():
             # Check that the code and number are space separated.
@@ -220,36 +147,7 @@ class TelephoneNumber:
         return code_is_valid
 
     def has_valid_length(self):
-        """Check if the phone number has a valid length
-
-        >>> print(TelephoneNumber('0508 123 456'))
-        0508 123 456
-
-        >>> print(TelephoneNumber('0508 123 4567'))
-        0508 123 4567 INV
-
-        >>> print(TelephoneNumber('0800 123 456'))
-        0800 123 456
-
-        >>> print(TelephoneNumber('0800 123 4567'))
-        0800 123 4567
-
-        >>> print(TelephoneNumber('0800 1234 5678'))
-        0800 1234 5678 INV
-
-        >>> print(TelephoneNumber('0900 12345'))
-        0900 12345
-
-        >>> print(TelephoneNumber('0900 123 456'))
-        0900 123 456 INV
-
-        >>> print(TelephoneNumber('02 409 1234'))
-        02 409 1234
-
-        >>> print(TelephoneNumber('02 409 12345'))
-        02 409 12345 INV
-
-        """  
+        """Check if the phone number has a valid length"""  
         # Handle case where number has letters in it for numbers that have an 
         # intial code (not an area code or mobile code).
         if self.code in TelephoneNumber.initial_codes and self.original.isupper():
@@ -260,42 +158,11 @@ class TelephoneNumber:
     def is_duplicate(self):
         """Check if phone number is a duplicate (already processed) 
         and return True if duplicate, False otherwise.
-
-        >>> print(TelephoneNumber('03 456 7890'))
-        03 456 7890
-
-        >>> print(TelephoneNumber('03 456 7890'))
-        03 456 7890 DUP
-
-        >>> print(TelephoneNumber('0800 TWOOFME'))
-        0800 896 6363
-
-        >>> print(TelephoneNumber('0800 TWOOFME'))
-        0800 896 6363 DUP
         """
         return self.digits in TelephoneNumber.phonebook
 
     def standard_format(self):
-        """Return phone number in the standard format.
-
-        >>> print(TelephoneNumber('021097777'))
-        021 097 777
-
-        >>> print(TelephoneNumber('0900 1234 6'))
-        0900 12346
-
-        >>> print(TelephoneNumber('0900 1234-7'))
-        0900 12347
-
-        >>> print(TelephoneNumber('0508 123457'))
-        0508 123 457
-
-        >>> print(TelephoneNumber('0800 123457'))
-        0800 123 457
-
-        >>> print(TelephoneNumber('021 123 45679'))
-        021 1234 5679
-        """
+        """Return phone number in the standard format."""
         # Handle special case for 025 prefixed numbers.
         if self.code == '025':
             self.code = '027' # Convert code to 027.
@@ -330,7 +197,6 @@ class TelephoneNumber:
         return self.original + ' INV'
 
     def __str__(self):
-        # return ', '.join([self.original, self.digits, self.code, self.number, self.formatted])
         return self.formatted
 
 def main():
@@ -346,5 +212,4 @@ def main():
         print(tn)
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    main()
