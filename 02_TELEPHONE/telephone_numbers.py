@@ -105,7 +105,7 @@ class TelephoneNumber:
 
         # Get the formatted string.
         if self.is_valid():
-            if (self.is_duplicate()):
+            if self.is_duplicate():
                 self.formatted = self.duplicate_format()
             else:
                 self.formatted = self.standard_format()
@@ -186,12 +186,12 @@ class TelephoneNumber:
         # Phone numbers with 6 or 7 digits (excl. the code) must have a space after 
         # the third digit.
         if ((len(self.number) == 6 or len(self.number) == 7) and
-            re.search("(\(?\d+\)?[\s-])(\d{3}\s\d{3})", self.original) == None):
+            not re.search("(\(?\d+\)?[\s-])(\d{3}[\s-]\d{3,4})", self.original)):
             return False           
         # Phone numbers with 8 digits (excl. the code) must have a space after 
         # the third digit.
         if (len(self.number) == 8 and
-            re.search("(\(?\d+\)?[\s-])(\d{4}\s\d{4})", self.original) == None):
+            not re.search("(\(?\d+\)?[\s-])(\d{4}[\s-]\d{4})", self.original)):
             return False           
 
         return True
