@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""telephone.py
+"""telephone_numbers.py
 Read in a list of telephone numbers from stdin, check whether each number is valid,
 and output the formatted numbers in the order they were added.
 
@@ -92,18 +92,20 @@ class TelephoneNumber:
         self.digits = TelephoneNumber.digitify(self.original)
         
         # Get the code and number parts of the phone number.
+        front_numbers = self.original.split(' ')[0]
+        # Strip paranthesis so we can check the code easily.
+        front_numbers = re.sub("[()]", '', front_numbers)
+
         for code in TelephoneNumber.valid_codes:
-            front_numbers = self.original.split(' ')[0]
-            # Strip paranthesis so we can check the code easily.
-            front_numbers = re.sub("[()]", '', front_numbers)
-            if front_numbers[:len(code)] == code:
+            if (self.original.isdigit() and front_numbers[:len(code)] == code) or (
+                front_numbers == code):
                 self.code = code
                 self.number = self.digits[len(code):]
                 break
 
         # Get the formatted string.
         if self.is_valid():
-            if (self.is_duplicate()):
+            if self.is_duplicate():
                 self.formatted = self.duplicate_format()
             else:
                 self.formatted = self.standard_format()
@@ -117,8 +119,16 @@ class TelephoneNumber:
         """Check if phone number is valid and return True if valid, false
         otherwise.
         """       
-        if (not self.has_valid_code() or not self.has_valid_length()):
+        if not (self.has_valid_code() and self.has_valid_length() and 
+                self.has_valid_spacing() and self.has_no_trailing()):
             return False
+
+        # # Handle cases for numbers with letters in them.
+        if self.original.isupper():
+            # Ensure there are no digits in the 'extra' slots.
+            extra = self.original[len(self.code) + TelephoneNumber.valid_lengths[self.code][-1]:]
+            if re.search("\d+", extra):
+                return False
 
         # Handle the special cases
         if self.code == '02':
@@ -131,32 +141,64 @@ class TelephoneNumber:
 
     def has_valid_code(self):
         """Check if the phone number has a valid code."""
-        # Check if number has been input with formatting or not.
-        if not self.original.isdigit():
-            # Check that the code and number are space separated.
-            split = self.original.split(' ')
-            # If there are no spaces or there is a hyphen in the first portion
-            # of the phone number (where the code should be) the code is invalid.
-            if len(split) == 1 or re.search("-", split[0]): 
-                return False
+        # Ensure numbers not entered as digits only have a space after the code.
+        if not self.original.isdigit() and not re.match("\(?\d+\)?\s", self.original):
+            return False             
 
         # Check if number starts with a valid code
-        code_is_valid = False
-
         for code in TelephoneNumber.valid_codes:
-            if self.digits[:len(code)] == code:
-                code_is_valid = True
+            if re.sub("[()]", '', self.code) == code:
+                return True
         
-        return code_is_valid
+        return False
 
     def has_valid_length(self):
         """Check if the phone number has a valid length"""  
         # Handle case where number has letters in it for numbers that have an 
         # intial code (not an area code or mobile code).
         if self.code in TelephoneNumber.initial_codes and self.original.isupper():
-            return len(self.number) <= 9 # Numbers with lett
+            return len(self.number) <= 9
 
         return len(self.number) in TelephoneNumber.valid_lengths[self.code]
+
+    def has_valid_spacing(self):
+        """Check if number has valid spacing."""
+        # Phone numbers entered as digits have valid 'spacing'.
+        if self.original.isdigit():
+            return True
+
+        # Ensure that numbers with letters do not have any spaces/hyphens.
+        if re.search("[A-Z][\s-]+[A-Z]", self.original):
+            return False
+
+        # Ensure the number of spaces does not exceed one.
+        if re.search("\s{2,}", self.original):
+            return False
+        
+        # Phone numbers with letters do not have to be checked any further.
+        if self.original.isupper():
+            return True
+
+        # Ensure spacing is in the correct place.
+        # Phone numbers with 5 digits (excl. the code) must have no spaces.
+        if len(self.number) == 5 and not re.search("\d{5}", self.original):
+            return False
+        # Phone numbers with 6 or 7 digits (excl. the code) must have a space after 
+        # the third digit.
+        if ((len(self.number) == 6 or len(self.number) == 7) and
+            not re.search("(\(?\d+\)?[\s-])(\d{3}[\s-]\d{3,4})", self.original)):
+            return False           
+        # Phone numbers with 8 digits (excl. the code) must have a space after 
+        # the third digit.
+        if (len(self.number) == 8 and
+            not re.search("(\(?\d+\)?[\s-])(\d{4}[\s-]\d{4})", self.original)):
+            return False           
+
+        return True
+
+    def has_no_trailing(self):
+        """Check if number has no invalid trailing characters."""
+        return re.search("\W+$", self.original) == None
 
     def is_duplicate(self):
         """Check if phone number is a duplicate (already processed) 
