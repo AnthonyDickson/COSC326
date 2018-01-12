@@ -70,5 +70,14 @@ class TelephoneNumberTestCase(unittest.TestCase):
         self.assertFalse(TelephoneNumber('05 123 4567').has_valid_code())
         self.assertFalse(TelephoneNumber('0274 123 456').has_valid_code())
 
+    def test_pairs(self):
+        """Are identical numbers identified correctly?"""
+        self.assertEqual(TelephoneNumber('0900 4HOLDEN').digits, TelephoneNumber('0900 44653').digits)
+        self.assertEqual(TelephoneNumber('0800 APPLES').digits, TelephoneNumber('(0800) APPLES').digits)
+
+    def test_digitify(self):
+        """Are lettered numbers converted correctly?"""
+        self.assertEqual(TelephoneNumber.digitify('0800 BANANAS'), '08002262627')
+
 if __name__ == '__main__':
     unittest.main()
