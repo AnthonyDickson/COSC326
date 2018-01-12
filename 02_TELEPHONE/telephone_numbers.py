@@ -1,80 +1,10 @@
 #!/usr/bin/env python
 
-"""telephone.py
+"""telephone_numbers.py
 Read in a list of telephone numbers from stdin, check whether each number is valid,
 and output the formatted numbers in the order they were added.
 
 Author: Anthony Dickson
-
-Tests
-***** Test code special cases ***** 
->>> print(TelephoneNumber('02 309-1234'))
-02 309-1234 INV
-
->>> print(TelephoneNumber('03 923 4567'))
-03 923 4567
-
->>> print(TelephoneNumber('04 9234 5678'))
-04 9234 5678 INV
-
->>> print(TelephoneNumber('06 900 4567'))
-06 900 4567 INV
-
->>> print(TelephoneNumber('07 911 4567'))
-07 911 4567 INV
-
->>> print(TelephoneNumber('09 999 4567'))
-09 999 4567 INV
-
->>> print(TelephoneNumber('021 123 456'))
-021 123 456
-
->>> print(TelephoneNumber('021 123 4567'))
-021 123 4567
-
->>> print(TelephoneNumber('021 1234 5678'))
-021 1234 5678
-
->>> print(TelephoneNumber('021 1234 56789'))
-021 1234 56789 INV
-
->>> print(TelephoneNumber('022 123 4567'))
-022 123 4567
-
->>> print(TelephoneNumber('022 123 456'))
-022 123 456 INV
-
->>> print(TelephoneNumber('027 123 4567'))
-027 123 4567
-
->>> print(TelephoneNumber('027 123 456'))
-027 123 456 INV
-
->>> print(TelephoneNumber('025 123 456'))
-027 412 3456
-
->>> print(TelephoneNumber('025 123 4567'))
-025 123 4567 INV
-
-***** Test numbers with paranthesis ***** 
->>> print(TelephoneNumber('(021) 123 45670'))
-021 1234 5670
-
->>> print(TelephoneNumber('(0800) 4BRACKETS'))
-0800 427 2253
-
-***** Test numbers with letters ***** 
->>> print(TelephoneNumber('0800 4PIPELINE'))
-0800 474 7354
-
->>> print(TelephoneNumber('0800 TOGOGO'))
-0800 864 646
-
->>> print(TelephoneNumber('0800 IMWAYTOOLONG'))
-0800 IMWAYTOOLONG INV
-
->>> print(TelephoneNumber('02 123 4567'))
-02 123 4567 INV
 """
 
 import fileinput
@@ -110,7 +40,7 @@ class TelephoneNumber:
                                'WXYZ']
 
     letter_num_conversion_chart = {
-        'ABC'   : 2,  'DEF' : 3,  'GHI' : 4,  'JKL' : 5,  'MNO' : 6, 
+        'ABC'   : 2, 'DEF'  : 3,  'GHI' : 4,  'JKL' : 5,  'MNO' : 6, 
         'PQRS'  : 7, 'TUV'  : 8,  'WXYZ': 9
     }
 
@@ -162,11 +92,13 @@ class TelephoneNumber:
         self.digits = TelephoneNumber.digitify(self.original)
         
         # Get the code and number parts of the phone number.
+        front_numbers = self.original.split(' ')[0]
+        # Strip paranthesis so we can check the code easily.
+        front_numbers = re.sub("[()]", '', front_numbers)
+
         for code in TelephoneNumber.valid_codes:
-            front_numbers = self.original.split(' ')[0]
-            # Strip paranthesis so we can check the code easily.
-            front_numbers = re.sub("[()]", '', front_numbers)
-            if front_numbers[:len(code)] == code:
+            if (self.original.isdigit() and front_numbers[:len(code)] == code) or (
+                front_numbers == code):
                 self.code = code
                 self.number = self.digits[len(code):]
                 break
@@ -187,8 +119,16 @@ class TelephoneNumber:
         """Check if phone number is valid and return True if valid, false
         otherwise.
         """       
-        if (not self.has_valid_code() or not self.has_valid_length()):
+        if not (self.has_valid_code() and self.has_valid_length() and 
+                self.has_valid_spacing() and self.has_no_trailing()):
             return False
+
+        # # Handle cases for numbers with letters in them.
+        if self.original.isupper():
+            # Ensure there are no digits in the 'extra' slots.
+            extra = self.original[len(self.code) + TelephoneNumber.valid_lengths[self.code][-1]:]
+            if re.search("\d+", extra):
+                return False
 
         # Handle the special cases
         if self.code == '02':
@@ -200,112 +140,74 @@ class TelephoneNumber:
         return True
 
     def has_valid_code(self):
-        """Check if the phone number has a valid code.
-
-        >>> print(TelephoneNumber('(021)123450'))
-        (021)123450 INV
-
-        >>> print(TelephoneNumber('03 789-0123'))
-        03 789 0123
-
-        >>> print(TelephoneNumber('03-789 0124'))
-        03-789 0124 INV
-        """
-        # Check if number has been input with formatting or not.
-        if not self.original.isdigit():
-            # Check that the code and number are space separated.
-            split = self.original.split(' ')
-            # If there are no spaces or there is a hyphen in the first portion
-            # of the phone number (where the code should be) the code is invalid.
-            if len(split) == 1 or re.search("-", split[0]): 
-                return False
+        """Check if the phone number has a valid code."""
+        # Ensure numbers not entered as digits only have a space after the code.
+        if not self.original.isdigit() and not re.match("\(?\d+\)?\s", self.original):
+            return False             
 
         # Check if number starts with a valid code
-        code_is_valid = False
-
         for code in TelephoneNumber.valid_codes:
-            if self.digits[:len(code)] == code:
-                code_is_valid = True
+            if re.sub("[()]", '', self.code) == code:
+                return True
         
-        return code_is_valid
+        return False
 
     def has_valid_length(self):
-        """Check if the phone number has a valid length
-
-        >>> print(TelephoneNumber('0508 123 456'))
-        0508 123 456
-
-        >>> print(TelephoneNumber('0508 123 4567'))
-        0508 123 4567 INV
-
-        >>> print(TelephoneNumber('0800 123 456'))
-        0800 123 456
-
-        >>> print(TelephoneNumber('0800 123 4567'))
-        0800 123 4567
-
-        >>> print(TelephoneNumber('0800 1234 5678'))
-        0800 1234 5678 INV
-
-        >>> print(TelephoneNumber('0900 12345'))
-        0900 12345
-
-        >>> print(TelephoneNumber('0900 123 456'))
-        0900 123 456 INV
-
-        >>> print(TelephoneNumber('02 409 1234'))
-        02 409 1234
-
-        >>> print(TelephoneNumber('02 409 12345'))
-        02 409 12345 INV
-
-        """  
+        """Check if the phone number has a valid length"""  
         # Handle case where number has letters in it for numbers that have an 
         # intial code (not an area code or mobile code).
         if self.code in TelephoneNumber.initial_codes and self.original.isupper():
-            return len(self.number) <= 9 # Numbers with lett
+            return len(self.number) <= 9
 
         return len(self.number) in TelephoneNumber.valid_lengths[self.code]
+
+    def has_valid_spacing(self):
+        """Check if number has valid spacing."""
+        # Phone numbers entered as digits have valid 'spacing'.
+        if self.original.isdigit():
+            return True
+
+        # Ensure that numbers with letters do not have any spaces/hyphens.
+        if re.search("[A-Z][\s-]+[A-Z]", self.original):
+            return False
+
+        # Ensure the number of spaces does not exceed one.
+        if re.search("\s{2,}", self.original):
+            return False
+        
+        # Phone numbers with letters do not have to be checked any further.
+        if self.original.isupper():
+            return True
+
+        # Ensure spacing is in the correct place.
+        # Phone numbers with 5 digits (excl. the code) must have no spaces.
+        if len(self.number) == 5 and not re.search("\d{5}", self.original):
+            return False
+        # Phone numbers with 6 or 7 digits (excl. the code) must have a space after 
+        # the third digit.
+        if ((len(self.number) == 6 or len(self.number) == 7) and
+            re.search("(\(?\d+\)?[\s-])(\d{3}\s\d{3})", self.original) == None):
+            return False           
+        # Phone numbers with 8 digits (excl. the code) must have a space after 
+        # the third digit.
+        if (len(self.number) == 8 and
+            re.search("(\(?\d+\)?[\s-])(\d{4}\s\d{4})", self.original) == None):
+            return False           
+
+        return True
+
+    def has_no_trailing(self):
+        """Check if number has no invalid trailing characters."""
+        return re.search("\W+$", self.original) == None
 
     def is_duplicate(self):
         """Check if phone number is a duplicate (already processed) 
         and return True if duplicate, False otherwise.
-
-        >>> print(TelephoneNumber('03 456 7890'))
-        03 456 7890
-
-        >>> print(TelephoneNumber('03 456 7890'))
-        03 456 7890 DUP
-
-        >>> print(TelephoneNumber('0800 TWOOFME'))
-        0800 896 6363
-
-        >>> print(TelephoneNumber('0800 TWOOFME'))
-        0800 896 6363 DUP
         """
         return self.digits in TelephoneNumber.phonebook
 
     def standard_format(self):
-        """Return phone number in the standard format.
-
-        >>> print(TelephoneNumber('021097777'))
-        021 097 777
-
-        >>> print(TelephoneNumber('0900 1234 6'))
-        0900 12346
-
-        >>> print(TelephoneNumber('0900 1234-7'))
-        0900 12347
-
-        >>> print(TelephoneNumber('0508 123457'))
-        0508 123 457
-
-        >>> print(TelephoneNumber('0800 123457'))
-        0800 123 457
-
-        >>> print(TelephoneNumber('021 123 45679'))
-        021 1234 5679
-        """
+        """Return phone number in the standard format."""
         # Handle special case for 025 prefixed numbers.
         if self.code == '025':
             self.code = '027' # Convert code to 027.
@@ -340,7 +242,6 @@ class TelephoneNumber:
         return self.original + ' INV'
 
     def __str__(self):
-        # return ', '.join([self.original, self.digits, self.code, self.number, self.formatted])
         return self.formatted
 
 def main():
@@ -356,5 +257,4 @@ def main():
         print(tn)
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
+    main()
