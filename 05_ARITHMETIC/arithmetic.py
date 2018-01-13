@@ -17,11 +17,11 @@ class Arithmetic:
         """Parse a string of space-separated numbers and return the 
         array of numbers.
         """
-        return nums
+        return list(map(int, nums.split()))
 
     def __init__(self, nums, target):
         self.nums = self.parse_nums(nums)
-        self.target = target.split()[0]
+        self.target = int(target.split()[0])
         self.order = target.split()[1]
 
 

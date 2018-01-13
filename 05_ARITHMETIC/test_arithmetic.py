@@ -12,6 +12,11 @@ class ArithmeticTests(unittest.TestCase):
         """Is the target number parsed correctly?"""
         self.assertEqual(Arithmetic('1 2 3', '7 N').target, 7)
     
+    def test_parse_order(self):
+        """Is the order parsed correctly?"""
+        self.assertEqual(Arithmetic('1 2 3', '7 N').order, 'N')
+        self.assertEqual(Arithmetic('1 2 3', '9 L').order, 'L')
+    
     def test_ouput_is_valid(self):
         """Is the program output valid?"""
         self.assertEqual(Arithmetic('1 2 3', '7 N').solve(), 'N 1 + 2 * 3')
