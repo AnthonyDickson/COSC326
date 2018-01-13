@@ -21,7 +21,7 @@ class ArithmeticTests(unittest.TestCase):
         """Is the program output valid?"""
         self.assertEqual(Arithmetic('1 2 3', '7 N').solve(), 'N 1 + 2 * 3')
         self.assertEqual(Arithmetic('1 2 3', '9 L').solve(), 'L 1 + 2 * 3')
-        self.assertEqual(Arithmetic('1 2 3', '100 N'.solve()), 'N impossible')
+        self.assertEqual(Arithmetic('1 2 3', '100 N').solve(), 'N impossible')
 
 if __name__ == '__main__':
     unittest.main()
