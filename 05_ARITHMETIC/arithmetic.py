@@ -104,7 +104,7 @@ class Arithmetic:
                     if self.is_solution():
                         return self.get_solution()
                     
-                    # Try this permetation with the ops flipped
+                    # Try this permutation, but with the ops flipped
                     self.flip_ops()
 
                     if self.is_solution():
@@ -125,8 +125,8 @@ class Arithmetic:
         return self.order + ' impossible'
 
     def is_solution(self):
-        """Return True if the current solution (nums and ops) produces the target
-        value, False otherwise.
+        """Return True if the current solution (nums and ops) produces the 
+        target value, False otherwise.
         """
         if self.order == 'L':
             return self.compute() == self.target
@@ -181,14 +181,15 @@ def main():
     a = None
 
     for line in fileinput.input():
-        if not line.strip() == '':
-            lines.append(line)
+        if line.strip() == '': 
+            continue # skip empty lines
 
+        lines.append(line)
+        
         if len(lines) == 2:
             a = Arithmetic(lines[0], lines[1])
             print(a.solve())
             lines = []
-
 
 if __name__ == '__main__':
     main()
