@@ -59,6 +59,8 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(Arithmetic('1 2 3 4', '14 N').solve(), 'N 1 * 2 + 3 * 4')
         self.assertEqual(Arithmetic('1 2 3 4', '24 N').solve(), 'N 1 * 2 * 3 * 4')
         self.assertEqual(Arithmetic('1 2 3 4 5', '30 N').solve(), 'N 1 + 2 * 3 * 4 + 5')
+        self.assertEqual(Arithmetic('1 2 3 4 5 6', '33 N').solve(), 'N 1 + 2 * 3 + 4 * 5 + 6')
+        self.assertEqual(Arithmetic('1 2 3 4 5 6', '127 N').solve(), 'N 1 + 2 * 3 + 4 * 5 * 6')
 
     def test_solve_L(self):
         """Are L ordered problems solved correctly?"""
@@ -66,6 +68,7 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(Arithmetic('1 2 3', '5 L').solve(), 'L 1 * 2 + 3')
         self.assertEqual(Arithmetic('1 2 3', '9 L').solve(), 'L 1 + 2 * 3')
         self.assertEqual(Arithmetic('1 2 3 4', '36 L').solve(), 'L 1 + 2 * 3 * 4')
+        self.assertEqual(Arithmetic('1 2 3 4 5 6', '71 L').solve(), 'L 1 + 2 * 3 + 4 * 5 + 6')
     
     def test_ouput_is_valid(self):
         """Is the program output valid?"""

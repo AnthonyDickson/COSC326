@@ -14,6 +14,7 @@ Author: Anthony Dickson
 Date: 13 January 2018
 """
 
+import fileinput
 import re
 
 class Arithmetic:
@@ -45,11 +46,26 @@ class Arithmetic:
         return list(map(int, nums.split()))
 
     def __init__(self, nums, target):
+        # Strip input of spaces.
+        nums = nums.strip()
+        target = target.strip()
+
+        # Ensure numbers are input correctly (space separated).
         if not re.match("^[\d+\s]*\d+$", nums):
             raise ValueError(repr(nums) + ' is invalid input.')
 
         self.nums = Arithmetic.parse_nums(nums)
 
+        # Ensure input numbers are between 1 and 10.
+        if min(self.nums) < 1 or max(self.nums) > 10:
+            raise ValueError(repr(nums) + ' is invalid input.')
+        
+        # Ensure input numbers are in order.
+        for i in range(1, len(self.nums)):
+            if not self.nums[i] - self.nums[i - 1] > 0: 
+                raise ValueError(repr(nums) + ' is invalid input.')
+
+        # Ensure the target number and the order are input correctly.
         if re.match("^\d+\s[NL]$", target):
             self.target, self.order = target.split()
             self.target = int(self.target)
@@ -81,25 +97,31 @@ class Arithmetic:
         # try all other permetations.
         for i in range(1, len(self.ops)):
             for j in range(i, len(self.ops)):
-                # Try changing the current op to a '*'.
+                for k in range(j, len(self.ops)):
+                    # Try changing the current op to a '*'.
+                    self.ops[k] = '*'
+                    
+                    if self.is_solution():
+                        return self.get_solution()
+                    
+                    # Try this permetation with the ops flipped
+                    self.flip_ops()
+
+                    if self.is_solution():
+                        return self.get_solution()
+
+                    # Flip ops back and...
+                    self.flip_ops()
+                    # and reset the current op.
+                    self.ops[k] = '+'
+
+                # Try changing a '+' to a '*'
                 self.ops[j] = '*'
-                
-                if self.is_solution():
-                    return self.get_solution()
-                
-                # Try this permetation with the ops flipped
-                self.flip_ops()
 
-                if self.is_solution():
-                    return self.get_solution()
-
-                # Flip ops back and...
-                self.flip_ops()
-                # and reset the current op.
-                self.ops[j] = '+'
-
-            # Try changing a '+' to a '*'
-            self.ops[i] = '*'
+            
+            # Fill in ops with pluses from the 'left' side. (Undoes the changes
+            # made in the above line).
+            self.ops[i] = '+'
 
         return self.order + ' impossible'
 
@@ -162,7 +184,19 @@ class Arithmetic:
         return self.get_solution()
 
 def main():
-    pass
+    """Read two lines then print the solution to that given scenario."""
+    lines = []
+    a = None
+
+    for line in fileinput.input():
+        if not line.strip() == '':
+            lines.append(line)
+
+        if len(lines) == 2:
+            a = Arithmetic(lines[0], lines[1])
+            print(a.solve())
+            lines = []
+
 
 if __name__ == '__main__':
     main()
