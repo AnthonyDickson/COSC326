@@ -80,22 +80,22 @@ class Arithmetic:
     def solve(self):
         """Solve the problem and return the solution."""
         # Try all ops equal to '+'.
-        self.ops = ['+'] * len(self.nums)
+        self.ops = ['+'] * (len(self.nums) - 1)
         
         if self.is_solution():
             return self.get_solution()
             
         # Try all ops equal to '*'.
-        self.ops = ['*'] * len(self.nums)
+        self.ops = ['*'] * (len(self.nums) - 1)
         
         if self.is_solution() == self.target:
             return self.get_solution()
         
         # Reset ops to all '+' and...
-        self.ops = ['+'] * len(self.nums)
+        self.ops = ['+'] * (len(self.nums) - 1)
 
-        # try all other permetations.
-        for i in range(1, len(self.ops)):
+        # try all other permutations.
+        for i in range(len(self.ops)):
             for j in range(i, len(self.ops)):
                 for k in range(j, len(self.ops)):
                     # Try changing the current op to a '*'.
@@ -117,7 +117,6 @@ class Arithmetic:
 
                 # Try changing a '+' to a '*'
                 self.ops[j] = '*'
-
             
             # Fill in ops with pluses from the 'left' side. (Undoes the changes
             # made in the above line).
@@ -136,34 +135,28 @@ class Arithmetic:
 
     def flip_ops(self):
         """Flip all '+' ops to '*' ops in self.ops and vice versa.
-
-        The op in position 0 will always be '+' (having the first
-        op as '*' is invalid).
         
         >>> a = Arithmetic('1 2 3', '6 N')
-        >>> a.ops = ['+', '*', '+']
+        >>> a.ops = ['*', '+']
         >>> a.flip_ops()
         >>> a.ops
-        ['+', '+', '*']
+        ['+', '*']
         """
-        ops = list(map(lambda op: '+' if op == '*' else '*', self.ops))
-        ops[0] = '+'
-        self.ops = ops
+        self.ops = list(map(lambda op: '+' if op == '*' else '*', self.ops))
 
-    def compute(self, i=0, a=0):
+    def compute(self):
         """Use nums and ops to compute the result using left to right ordering 
         and return the result.
-        
-        @param i The index used for recursion.
-        @param a The running total used for recursion.
         """
-        if i == len(self.nums):
-            return a
+        result = self.nums[0]
 
-        if self.ops[i] == '+':
-            return self.compute(i + 1, a + self.nums[i])
+        for i in range(len(self.ops)):
+            if self.ops[i] == '*':
+                result *= self.nums[i + 1]
+            else:
+                result += self.nums[i + 1]
 
-        return self.compute(i + 1, a * self.nums[i])
+        return result
 
     def get_solution(self):
         """Return the solution as a string."""
@@ -173,14 +166,13 @@ class Arithmetic:
         """Merge, or zip, nums and ops and return as string."""
         result = str(self.nums[0])
 
-        for i in range(1, len(self.nums)):
-            result += ' ' + str(self.ops[i]) + ' ' + str(self.nums[i])
+        for i in range(len(self.ops)):
+            result += ' ' + str(self.ops[i]) + ' ' + str(self.nums[i + 1])
 
         return result
 
     def __str__(self):
         """Return the solution as a string."""
-
         return self.get_solution()
 
 def main():
