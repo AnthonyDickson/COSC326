@@ -7,16 +7,18 @@ class ArithmeticTests(unittest.TestCase):
     def test_parse_input(self):
         """Is input parsed correctly?"""
         self.assertEqual(Arithmetic('1 2 3', '7 N').nums, [1, 2, 3])
+        self.assertEqual(Arithmetic('  2  6   1 ', '8 N').nums, [2, 6, 1])
     
     def test_parse_target(self):
         """Is the target number parsed correctly?"""
         self.assertEqual(Arithmetic('1 2 3', '7 N').target, 7)
+        self.assertEqual(Arithmetic('1 2 3', '7    N').target, 7)
     
     def test_parse_order(self):
         """Is the order parsed correctly?"""
         self.assertEqual(Arithmetic('1 2 3', '7 N').order, 'N')
         self.assertEqual(Arithmetic('1 2 3', '9 L').order, 'L')
-        self.assertEqual(Arithmetic('1 2 3', '9').order, 'L')
+        self.assertEqual(Arithmetic('1 2 3', '9 L').order, 'L')
 
     def test_flip_ops(self):
         """Are ops flipped correctly?"""
@@ -64,6 +66,8 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(Arithmetic('1 2 3 4 5', '30 N').solve(), 'N 1 + 2 * 3 * 4 + 5')
         self.assertEqual(Arithmetic('1 2 3 4 5 6', '33 N').solve(), 'N 1 + 2 * 3 + 4 * 5 + 6')
         self.assertEqual(Arithmetic('1 2 3 4 5 6', '127 N').solve(), 'N 1 + 2 * 3 + 4 * 5 * 6')
+
+        self.assertTrue(Arithmetic('2 11 8 15', '45 N').solve() != 'N impossible')
 
     def test_solve_L(self):
         """Are L ordered problems solved correctly?"""

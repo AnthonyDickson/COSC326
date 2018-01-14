@@ -38,44 +38,13 @@ class Arithmetic:
     >>> Arithmetic('1 2 3', '100 N')
     N impossible
     """
-    @staticmethod
-    def parse_nums(nums):
-        """Parse a string of space-separated numbers and return the 
-        numbers as a list of integers.
-        """
-        return list(map(int, nums.split()))
 
-    def __init__(self, nums, target):
-        # Strip input of spaces.
-        nums = nums.strip()
-        target = target.strip()
-
-        # Ensure numbers are input correctly (space separated).
-        if not re.match("^[\d+\s]*\d+$", nums):
-            raise ValueError(repr(nums) + ' is invalid input.')
-
-        self.nums = Arithmetic.parse_nums(nums)
-
-        # Ensure input numbers are between 1 and 10.
-        if min(self.nums) < 1 or max(self.nums) > 10:
-            raise ValueError(repr(nums) + ' is invalid input.')
-        
-        # Ensure input numbers are in order.
-        for i in range(1, len(self.nums)):
-            if not self.nums[i] - self.nums[i - 1] > 0: 
-                raise ValueError(repr(nums) + ' is invalid input.')
-
-        # Ensure the target number and the order are input correctly.
-        if re.match("^\d+\s[NL]$", target):
-            self.target, self.order = target.split()
-            self.target = int(self.target)
-        elif re.match("^\d+$", target):
-            self.target = int(target)
-            self.order = 'L'
-        else:
-            raise ValueError(repr(target) + ' is invalid input.')
-        
+    def __init__(self, nums, target):        
+        self.nums = list(map(int, nums.split()))
+        self.target, self.order = target.split()
+        self.target = int(self.target)        
         self.ops = []
+        
 
     def solve(self):
         """Solve the problem and return the solution."""
@@ -176,19 +145,21 @@ class Arithmetic:
         return self.get_solution()
 
 def main():
-    """Read two lines then print the solution to that given scenario."""
+    """Read two lines then print the solution to that given scenario.
+
+    Usage: python arithmetic.py < <file>"""
     lines = []
-    a = None
 
     for line in fileinput.input():
-        if line.strip() == '': 
-            continue # skip empty lines
-
         lines.append(line)
         
         if len(lines) == 2:
-            a = Arithmetic(lines[0], lines[1])
-            print(a.solve())
+            try:
+                print(Arithmetic(lines[0], lines[1]).solve())
+            except ValueError:
+                # skip over any scenarios with invalid input.
+                pass
+                
             lines = []
 
 if __name__ == '__main__':
