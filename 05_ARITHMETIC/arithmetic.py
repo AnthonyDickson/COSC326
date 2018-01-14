@@ -16,6 +16,7 @@ Date: 13 January 2018
 
 import fileinput
 import re
+from itertools import product
 
 class Arithmetic:
     """Given a set of numbers to use, a target value, and the order to use;
@@ -48,48 +49,13 @@ class Arithmetic:
 
     def solve(self):
         """Solve the problem and return the solution."""
-        # Try all ops equal to '+'.
-        self.ops = ['+'] * (len(self.nums) - 1)
-        
-        if self.is_solution():
-            return self.get_solution()
+        # Run through all permutations of addition and multiplication
+        # operations.
+        for ops in product('+*', repeat=len(self.nums) - 1):
+            self.ops = ops
             
-        # Try all ops equal to '*'.
-        self.ops = ['*'] * (len(self.nums) - 1)
-        
-        if self.is_solution() == self.target:
-            return self.get_solution()
-        
-        # Reset ops to all '+' and...
-        self.ops = ['+'] * (len(self.nums) - 1)
-
-        # try all other permutations.
-        for i in range(len(self.ops)):
-            for j in range(i, len(self.ops)):
-                for k in range(j, len(self.ops)):
-                    # Try changing the current op to a '*'.
-                    self.ops[k] = '*'
-                    
-                    if self.is_solution():
-                        return self.get_solution()
-                    
-                    # Try this permutation, but with the ops flipped
-                    self.flip_ops()
-
-                    if self.is_solution():
-                        return self.get_solution()
-
-                    # Flip ops back and...
-                    self.flip_ops()
-                    # and reset the current op.
-                    self.ops[k] = '+'
-
-                # Try changing a '+' to a '*'
-                self.ops[j] = '*'
-            
-            # Fill in ops with pluses from the 'left' side. (Undoes the changes
-            # made in the above line).
-            self.ops[i] = '+'
+            if self.is_solution():
+                return self.get_solution()
 
         return self.order + ' impossible'
 
@@ -101,17 +67,6 @@ class Arithmetic:
             return self.compute() == self.target
 
         return eval(self.merge_nums_ops()) == self.target
-
-    def flip_ops(self):
-        """Flip all '+' ops to '*' ops in self.ops and vice versa.
-        
-        >>> a = Arithmetic('1 2 3', '6 N')
-        >>> a.ops = ['*', '+']
-        >>> a.flip_ops()
-        >>> a.ops
-        ['+', '*']
-        """
-        self.ops = list(map(lambda op: '+' if op == '*' else '*', self.ops))
 
     def compute(self):
         """Use nums and ops to compute the result using left to right ordering 

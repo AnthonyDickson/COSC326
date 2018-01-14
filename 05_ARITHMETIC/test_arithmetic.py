@@ -20,13 +20,6 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(Arithmetic('1 2 3', '9 L').order, 'L')
         self.assertEqual(Arithmetic('1 2 3', '9 L').order, 'L')
 
-    def test_flip_ops(self):
-        """Are ops flipped correctly?"""
-        a = Arithmetic('1 2 3', '6 N')
-        a.ops = [ '*', '+']
-        a.flip_ops()
-        self.assertEqual(a.ops, ['+', '*'])
-
     def test_compute(self):
         """Does compute work correctly?"""
         a = Arithmetic('1 2 3', '7 N')
@@ -69,6 +62,9 @@ class ArithmeticTests(unittest.TestCase):
 
         self.assertTrue(Arithmetic('2 11 8 15', '45 N').solve() != 'N impossible')
 
+        # Cases from submission.
+        self.assertEqual(Arithmetic('1 2 3 4 5', '10 N').solve(), 'N impossible')
+
     def test_solve_L(self):
         """Are L ordered problems solved correctly?"""
         self.assertEqual(Arithmetic('1 2 3', '6 L').solve(), 'L 1 + 2 + 3')
@@ -76,6 +72,11 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(Arithmetic('1 2 3', '9 L').solve(), 'L 1 + 2 * 3')
         self.assertEqual(Arithmetic('1 2 3 4', '36 L').solve(), 'L 1 + 2 * 3 * 4')
         self.assertEqual(Arithmetic('1 2 3 4 5 6', '71 L').solve(), 'L 1 + 2 * 3 + 4 * 5 + 6')
+        
+        # Case from submission.
+        self.assertEqual(Arithmetic('1 2 3 4 5 1 2 3 4 5', '100 L').solve(), 'L impossible')
+        # Failed case from submission.
+        self.assertEqual(Arithmetic('1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5 1 2 3 4 5', '2134 L').solve(), 'L 1 + 2 + 3 + 4 + 5 + 1 + 2 + 3 + 4 + 5 + 1 + 2 + 3 + 4 * 5 + 1 * 2 + 3 + 4 + 5 + 1 + 2 + 3 + 4 * 5 * 1 + 2 + 3 + 4 + 5')
     
     def test_ouput_is_valid(self):
         """Is the program output valid?"""
