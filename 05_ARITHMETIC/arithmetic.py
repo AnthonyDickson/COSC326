@@ -52,6 +52,21 @@ class BST:
                 self.right = BST()
                 self.right.key = key
 
+    def contains(self, key):
+        """Return whether or not the bst contains a node with the given key."""
+        if self.is_empty():
+            return False
+
+        if key == self.key:
+            return True
+        elif self.left and key < self.key:
+            return self.left.contains(key)
+        elif self.right and key > self.key:
+            return self.right.contains(key)
+        else:
+            return False
+
+
     def height(self):
         """Return the height of this node (sub-tree)."""
         if self.is_empty():
@@ -74,9 +89,9 @@ class BST:
         """
         if self.key == key:
             return 0
-        elif key < self.key and self.left:
+        elif self.left and key < self.key:
             return 1 + self.left.depth_of(key)
-        elif key > self.key and self.right:
+        elif self.right and key > self.key:
             return 1 + self.right.depth_of(key)
         else:
             return -1

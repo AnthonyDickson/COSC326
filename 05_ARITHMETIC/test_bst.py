@@ -75,5 +75,18 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(bst.depth_of('b'), 1)
         self.assertEqual(bst.depth_of('c'), 2)
 
+    def test_search(self):
+        """Search a bst for a key."""
+        bst = BST()
+        bst.add('c')
+        bst.add('a')
+        bst.add('b')
+        bst.add('d')
+        bst.add('e')
+        bst.add('f')
+        self.assertTrue(bst.contains('a'))
+        self.assertTrue(bst.contains('f'))
+        self.assertFalse(bst.contains('g'))
+
 if __name__ == '__main__':
     unittest.main(verbosity=1)
