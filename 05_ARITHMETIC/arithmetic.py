@@ -15,205 +15,20 @@ Date: 13 January 2018
 """
 
 import fileinput
-from collections import deque
 
-class BST:
-    """A binary search tree implementation where each path in the tree
-    represents a combination of operations.
-
-    Each node keeps track of:
-        its key
-        a number
-        an opertaion (either + or *)
-    
-    Does not support deletion.
-    """    
-
-    @staticmethod
-    def from_sorted_list(a, start, end):
-        """Construct a bst from a list of sorted numbers.
-        
-        Method adapted from: 
-        https://www.geeksforgeeks.org/sorted-array-to-balanced-bst/
-        """
-        if start > end:
-            return
-
-        mid = int((start + end) / 2)        
-        node = BST() 
-        node.key = a[mid]
-        node.left = BST.from_sorted_list(a, start, mid - 1)
-        node.right = BST.from_sorted_list(a, mid + 1, end)
-
-        if node.left:
-            node.left.op = '+'
-        if node.right:
-            node.right.op = '*'
-         
-        return node
-
+class BTNode:
     def __init__(self):
-        self.key = None
-        self.num = 0
+        self.parent = None
+        self.key = 0
+        self.val = 0
         self.op = ''
         self.left = None
         self.right = None
         self.open = True
 
-    def is_empty(self):
-        """Return whether or not this tree is empty."""
-        return self.key == None or self.key == ''
-
-    def has_child(self):
-        """Return whether or not this node has at least one child."""
-        return self.left or self.right
-
-    def add(self, key, num=0, op=''):
-        """Add a new node to this sub-tree."""
-
-        if self.is_empty():
-            self.key = key
-            self.num = num
-            self.op = op
-
-        node = BST()
-        node.key = key
-        node.num = num
-        node.op = op
-
-        if key < self.key:
-            if self.left:
-                self.left.add(key, num, op)
-            else:                
-                self.left = node
-        elif key > self.key: 
-            if self.right:
-                self.right.add(key, num, op)
-            else:                
-                self.right = node
-
-    def contains(self, key):
-        """Return whether or not the bst contains a node with the given key."""
-        if self.is_empty():
-            return False
-
-        if key == self.key:
-            return True
-        elif self.left and key < self.key:
-            return self.left.contains(key)
-        elif self.right and key > self.key:
-            return self.right.contains(key)
-        else:
-            return False
-
-    def get(self, key):
-        """Return the node with the given key, or None if not found."""
-        if self.is_empty():
-            return None
-
-        if key == self.key:
-            return self
-        elif self.left and key < self.key:
-            return self.left.get(key)
-        elif self.right and key > self.key:
-            return self.right.get(key)
-        else:
-            return None
-
-    def height(self):
-        """Return the height of this node (sub-tree)."""
-        if self.is_empty():
-            return 0
-
-        left = 0
-        right = 0
-
-        if self.left:
-            left = self.left.height()
-        if self.right:
-            right = self.right.height()
-        
-        return 1 + (left if left > right else right)
-
-    def depth_of(self, key):
-        """Return the depth of the node whose key matches the given key.
-        
-        Return -1 if not found.
-        """
-        if self.key == key:
-            return 0
-        elif self.left and key < self.key:
-            return 1 + self.left.depth_of(key)
-        elif self.right and key > self.key:
-            return 1 + self.right.depth_of(key)
-        else:
-            return -1
-
-    def path_to(self, key):
-        """Return the path to the node with the give key."""
-        if self.is_empty():       
-            return []
-        
-        if key < self.key and self.left:
-            return [ self ] + self.left.path_to(key)
-        elif key > self.key and self.right:
-            return [ self ] + self.right.path_to(key)
-        elif key == self.key:
-            return [ self ]
-        else:
-            return None
-
-    def bft(self, f=None):
-        """Performs a breadth-first traversal of a tree and either:
-        a) applies the given function at each node.
-        OR
-        b) returns a generator of the node keys in breadth-first order.
-        """
-        if self.is_empty():
-            return
-
-        q = deque()
-        q.append(self)
-
-        while len(q) > 0:
-            node = q.popleft()
-
-            if f:
-                f(node)
-            else:
-                yield node
-
-            if node.left:# and node.left.open:
-                q.append(node.left)
-            
-            if node.right:# and node.right.open:
-                q.append(node.right)
-
-    def set_num(self, num):
-        """Set this node's num."""
-        self.num = num
-
-    def close(self):
-        """Close this node and any desendents."""
-        if self.is_empty():
-            return
-
-        self.open = False
-
-        if self.left:
-            self.left.close()
-        
-        if self.right:
-            self.right.close()
-
     def __str__(self):
-        """Return string of nodes in breadth-first order."""
-        result = ''
-
-        for bst in self.bft():
-            result += str([bst.key, bst.num, bst.op]) + ', '
-
-        return result
+        """Return string of key, val and op."""
+        return '({}, {}, {})'.format(str(self.key), str(self.val), self.op)
 
 class Arithmetic:
     """Given a set of numbers to use, a target value, and the order to use;
@@ -237,6 +52,7 @@ class Arithmetic:
     N impossible
     """
 
+
     def __init__(self, nums, target):        
         self.nums = list(map(int, nums.split()))
         self.target, self.order = target.split()
@@ -246,96 +62,98 @@ class Arithmetic:
         self.solution_tree = None
         self.solution_path = []
         
-
     def solve(self):
         """Solve the problem and return the solution."""
-        # Run through all permutations of addition and multiplication
-        # operations.
-        # for ops in product('+*', repeat=len(self.nums) - 1):
-        #     self.ops = ops
-            
-        #     if self.is_solution():
-        #         return self.get_solution()
+        # Make a binary tree
+        root = BTNode()
+        root.key = self.nums[0]
+        stack = []
+        stack.append(root)
 
-        # Create an empty binary tree
-        indicies = list(range(len(self.nums) ** 2 - 2))
-        self.solution_tree = BST.from_sorted_list(indicies, 0, len(indicies))
-        # At each step 
-        # 
-        # # Perform a breadth first traversal
-        # # Evaluate the result of nums and ops up to step #
-        # # If result is greater than target we stop searching this branch and try sibling branch
-        print(self.solution_tree)
-        for step in self.solution_tree.bft(self.step):
-            step()
+        i = 0
+        max_i = 2 ** len(self.nums)
+        depth = 0
+        max_depth = len(self.nums) - 1
+
+        # Keep a copy of the original nums.
+        nums_copy = self.nums[:]
+
+        while i < max_i:
+            # Peek at node on top of the stack.
+            node = stack[-1]
+            # Set the node key to corresponding number from nums.
+            node.key = nums_copy[depth]
+
+            if node.val == 0:
+                self.ops = []
+                self.nums = []
+
+                # Get the nums and ops for this path.
+                for n in stack:
+                    if n.op != '':
+                        self.ops.append(n.op)
+                    
+                    self.nums.append(n.key)
+
+                # Get and store the value of this node
+                node.val = self.compute()
+
+
+            print('At node: ' + str(node))
+            if node.parent:
+                if node == node.parent.left:
+                    print('In left branch of node: ' + str(node.parent))
+                else:
+                    print('In left branch of node: ' + str(node.parent))
+            print('Stack :' + str(list(map(lambda n: str(n), stack))))
+            print()
+
+            # Node val is target value and we have the correct depth.
+            if node.val == self.target and depth == max_depth:
+                self.solution = self.get_solution()
+                break
+            # Node val has overshot target value and we are not at the 
+            # correct depth.
+            if node.val >= self.target and depth < max_depth:
+                # Set this node to 'closed'.
+                node.open = False
+                # Remove this node from path.
+                stack.pop()
+                depth -= 1
+            
+            # If left branch has not been explored yet and we have not reached
+            # the max depth yet and this node is 'open'.
+            if node.open and node.left == None and depth < max_depth:
+                left = BTNode()
+                left.op = '*'
+                left.parent = node
+                node.left = left
+                stack.append(left)
+                depth += 1
+            # Otherwise explore the right branch.
+            elif node.open and node.right == None and depth < max_depth:
+                right = BTNode()
+                right.op = '+'
+                right.parent = node
+                node.right = right
+                stack.append(right)
+                depth += 1
+            # Both left and right branches have been explored.
+            elif node.open and depth < max_depth:
+                if not node.left.open and not node.right.open:
+                    node.open = False
+                    stack.pop() 
+                    depth -= 1
+                elif not node.left.open:
+                    
+
+            i += 1
+        
 
         if self.solution:
             return self.solution
 
         return self.order + ' impossible'
-
-    def step(self, node):
-
-        print('At node ' + str(node.key))
-        print('Setting node to: ' + str(self.nums[self.solution_tree.depth_of(node.key)]))
-        node.set_num(self.nums[self.solution_tree.depth_of(node.key)])
-
-        if not node.open:
-            return
-
-        path = self.solution_tree.path_to(node.key)
-
-        # Get the nums and ops from this path
-        nums = []
-        ops = []
-
-        for n in path:
-            nums.append(n.num)
-
-            if n.op in '*+':
-                ops.append(n.op)
-
-        # Make a backup copy of self.nums and self.ops
-        nums_copy = self.nums[:]
-        ops_copy = self.ops[:]
-
-        self.nums = nums
-        self.ops = ops[1:]
-
-
-        z = ''
-
-        if node.left:
-            z += str(node.left.key)
-
-        if node.right:
-            z += str(node.right.key)
-            
-        print('Node children: ' + z)
-        print('Path: ' + ' -> '.join(list(map(lambda x: str(x.key), path))) )
-        print('Nums: ' + str(self.nums))
-        print('ops: ' + str(self.ops))
-
-        # Compute the value of this path.
-        path_value = self.compute()
-
-        print('Current solution: ' + self.get_solution())
-        print('Path value: ' + str(path_value) + '\n')
-
-        # If we have found the target value and we are at a leaf.
-        if path_value == self.target and not node.has_child():
-            self.solution = self.get_solution()
-            self.solution_path = path
-        # Otherwise, if have overshot the target value and we are not yet at a 
-        # leaf.
-        elif path_value >= self.target:
-            # 'Close' this node and its children nodes so that this node and
-            # any descendants are ignored in the future.
-            node.close()
-
-        # Restore ops and nums
-        self.ops = ops_copy
-        self.nums = nums_copy
 
 
     def is_solution(self):
@@ -376,7 +194,7 @@ class Arithmetic:
 
     def __str__(self):
         """Return the solution as a string."""
-        return self.get_solution()
+        return self.solution
 
 def main():
     """Read two lines then print the solution to that given scenario.
