@@ -15,8 +15,107 @@ Date: 13 January 2018
 """
 
 import fileinput
-import re
-from itertools import product
+from collections import deque
+
+class BST:
+    """A simple binary search tree implementation.
+    
+    Does not support deletion.
+    """
+    def __init__(self):
+        self.key = ''
+        self.left = None
+        self.right = None
+
+    def is_empty(self):
+        """Return whether or not this tree is empty."""
+        return self.key == ''
+
+    def has_child(self):
+        """Return whether or not this node has at least one child."""
+        return self.left or self.right
+
+    def add(self, key):
+        """Add a new node to this sub-tree."""
+        if self.is_empty():
+            self.key = key
+        if key < self.key:
+            if self.left:
+                self.left.add(key)
+            else:                
+                self.left = BST()
+                self.left.key = key
+        elif key > self.key:
+            if self.right:
+                self.right.add(key)
+            else:                
+                self.right = BST()
+                self.right.key = key
+
+    def height(self):
+        """Return the height of this node (sub-tree)."""
+        if self.is_empty():
+            return 0
+
+        left = 0
+        right = 0
+
+        if self.left:
+            left = self.left.height()
+        if self.right:
+            right = self.right.height()
+        
+        return 1 + (left if left > right else right)
+
+    def depth_of(self, key):
+        """Return the depth of the node whose key matches the given key.
+        
+        Return -1 if not found.
+        """
+        if self.key == key:
+            return 0
+        elif key < self.key and self.left:
+            return 1 + self.left.depth_of(key)
+        elif key > self.key and self.right:
+            return 1 + self.right.depth_of(key)
+        else:
+            return -1
+
+    def bft(self, f=None):
+        """Performs a breadth-first traversal of a tree and either:
+        a) applies the given function at each node.
+        OR
+        b) returns a generator of the node keys in breadth-first order.
+        """
+        if self.is_empty():
+            return
+
+        q = deque()
+        q.append(self)
+
+        while len(q) > 0:
+            node = q.popleft()
+
+            if f:
+                f(node.key)
+            else:
+                yield node.key
+
+            if node.left:
+                q.append(node.left)
+            
+            if node.right:
+                q.append(node.right)
+
+    def __str__(self):
+        """Return string of nodes in breadth-first order."""
+        result = ''
+
+        for i in self.bft():
+            result += i
+
+        return result
+
 
 class Arithmetic:
     """Given a set of numbers to use, a target value, and the order to use;
@@ -51,11 +150,19 @@ class Arithmetic:
         """Solve the problem and return the solution."""
         # Run through all permutations of addition and multiplication
         # operations.
-        for ops in product('+*', repeat=len(self.nums) - 1):
-            self.ops = ops
+        # for ops in product('+*', repeat=len(self.nums) - 1):
+        #     self.ops = ops
             
-            if self.is_solution():
-                return self.get_solution()
+        #     if self.is_solution():
+        #         return self.get_solution()
+
+        # Create an empty binary tree
+        # Perform a depth first traversal
+        # At each step 
+        # 
+        # # Evaluate the result of nums and ops up to step #
+        # # If result is greater than target we stop searching this branch and try sibling branch
+        # 
 
         return self.order + ' impossible'
 
