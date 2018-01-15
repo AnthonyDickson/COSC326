@@ -40,10 +40,22 @@ class ArithmeticTests(unittest.TestCase):
     def test_bft(self):
         """Print breadth-first traversal of a tree."""
         bst = BST()
+        bst.add('d')
+
         bst.add('b')
         bst.add('a')
         bst.add('c')
-        self.assertEqual(str(bst), 'bac')
+
+        bst.add('f')
+        bst.add('e')
+        bst.add('g')
+
+        bst_str = ''
+
+        for i in bst.bft():
+            bst_str += i.key
+
+        self.assertEqual(bst_str, 'dbfaceg')
 
     def test_height(self):
         """Get the height of a tree."""
