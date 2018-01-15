@@ -24,7 +24,7 @@ class BTNode:
         self.op = ''
         self.left = None
         self.right = None
-        self.open = True
+        self.done = False
 
     def __str__(self):
         """Return string of key, val and op."""
@@ -52,7 +52,6 @@ class Arithmetic:
     N impossible
     """
 
-
     def __init__(self, nums, target):        
         self.nums = list(map(int, nums.split()))
         self.target, self.order = target.split()
@@ -69,21 +68,19 @@ class Arithmetic:
         root.key = self.nums[0]
         stack = []
         stack.append(root)
-
-        i = 0
-        max_i = 2 ** len(self.nums)
+        
         depth = 0
-        max_depth = len(self.nums) - 1
+        target_depth = len(self.nums) - 1
 
         # Keep a copy of the original nums.
         nums_copy = self.nums[:]
 
-        while i < max_i:
+        while not root.done:
             # Peek at node on top of the stack.
             node = stack[-1]
             # Set the node key to corresponding number from nums.
             node.key = nums_copy[depth]
-
+            # Set the node val if not done already.
             if node.val == 0:
                 self.ops = []
                 self.nums = []
@@ -105,49 +102,61 @@ class Arithmetic:
                     print('In left branch of node: ' + str(node.parent))
                 else:
                     print('In left branch of node: ' + str(node.parent))
+            print('At depth: ' + str(depth))
             print('Stack :' + str(list(map(lambda n: str(n), stack))))
-            print()
 
-            # Node val is target value and we have the correct depth.
-            if node.val == self.target and depth == max_depth:
-                self.solution = self.get_solution()
-                break
-            # Node val has overshot target value and we are not at the 
-            # correct depth.
-            if node.val >= self.target and depth < max_depth:
-                # Set this node to 'closed'.
-                node.open = False
-                # Remove this node from path.
-                stack.pop()
-                depth -= 1
-            
-            # If left branch has not been explored yet and we have not reached
-            # the max depth yet and this node is 'open'.
-            if node.open and node.left == None and depth < max_depth:
-                left = BTNode()
-                left.op = '*'
-                left.parent = node
-                node.left = left
-                stack.append(left)
-                depth += 1
-            # Otherwise explore the right branch.
-            elif node.open and node.right == None and depth < max_depth:
-                right = BTNode()
-                right.op = '+'
-                right.parent = node
-                node.right = right
-                stack.append(right)
-                depth += 1
-            # Both left and right branches have been explored.
-            elif node.open and depth < max_depth:
-                if not node.left.open and not node.right.open:
-                    node.open = False
-                    stack.pop() 
+            # If we are not at the target depth yet.
+            if depth < target_depth:
+                print('Overshot target value at node ' + str(node))
+                # If we have overshot the target value...
+                if node.val > self.target:
+                    # Remove this node from the solution path.
+                    node.done = True
+                    stack.pop()
                     depth -= 1
-                elif not node.left.open:
-                    
+                # Otherwise explore further down the branch.
+                else:
+                    print('Exploring further...')
+                    # If left branch has not been explored.
+                    if not node.left:
+                        # Expand the tree.
+                        print('Planting tree...')
+                        node.left = BTNode()
+                        node.left.op = '*'
+                        node.left.parent = node
 
-            i += 1
+                        node.right = BTNode()
+                        node.right.op = '+'
+                        node.right.parent = node
+                    
+                    if not node.left.done:
+                        # Explore left branch.
+                        print('Exploring left branch.')
+                        stack.append(node.left)
+                        depth += 1
+                    elif node.left.done and not node.right.done:
+                        # Explore right branch.
+                        print('Exploring right branch.')
+                        stack.append(node.right)
+                        depth += 1
+                    else:
+                        # Both branches explored.
+                        # Remove this node from solution path.
+                        node.done = True
+                        stack.pop()
+                        depth += 1
+            elif depth == target_depth:  
+                # If node val is target value and we have the correct depth.
+                if node.val == self.target:
+                    print('Found solution.')
+                    self.solution = self.get_solution()
+                    break
+                else:
+                    node.done = True
+                    stack.pop()
+                    depth -= 1
+                
+            print('\n')
         
 
         if self.solution:
