@@ -17,18 +17,15 @@ Date: 13 January 2018
 import fileinput
 
 class BTNode:
-    def __init__(self):
-        self.parent = None
-        self.key = 0
-        self.val = 0
-        self.op = ''
-        self.left = None
-        self.right = None
-        self.done = False
-
-    def __str__(self):
-        """Return string of key, val and op."""
-        return '({}, {}, {})'.format(str(self.key), str(self.val), self.op)
+    """A binary-tree node."""
+    key = 0
+    val = 0
+    op = ''
+    nums = []
+    ops = []
+    left = None
+    right = None
+    done = False
 
 class Arithmetic:
     """Given a set of numbers to use, a target value, and the order to use;
@@ -58,118 +55,84 @@ class Arithmetic:
         self.target = int(self.target)        
         self.ops = []
         self.solution = ''
-        self.solution_tree = None
-        self.solution_path = []
         
     def solve(self):
         """Solve the problem and return the solution."""
-        # Make a binary tree
         root = BTNode()
         root.key = self.nums[0]
         stack = []
         stack.append(root)
-        
-        depth = 0
         target_depth = len(self.nums) - 1
-
-        # Keep a copy of the original nums.
         nums_copy = self.nums[:]
 
+        # Perform a depth-first search of the possible solutions.
         while not root.done:
+            # Calculate current tree depth.
+            depth = len(stack) - 1
             # Peek at node on top of the stack.
             node = stack[-1]
             # Set the node key to corresponding number from nums.
             node.key = nums_copy[depth]
-            # Set the node val if not done already.
-            if node.val == 0:
-                self.ops = []
-                self.nums = []
 
-                # Get the nums and ops for this path.
-                for n in stack:
-                    if n.op != '':
-                        self.ops.append(n.op)
-                    
-                    self.nums.append(n.key)
+            # Set the node value if not done already.
+            if node.val == 0:
+                if depth == 0:
+                    node.nums = [ node.key ]
+                else:
+                    parent = stack[depth - 1]                
+                    node.nums = parent.nums[:] + [ node.key ]
+                    node.ops = parent.ops[:] + [ node.op]
+
+                self.nums = node.nums
+                self.ops = node.ops
 
                 # Get and store the value of this node
                 node.val = self.compute()
 
-
-            print('At node: ' + str(node))
-            if node.parent:
-                if node == node.parent.left:
-                    print('In left branch of node: ' + str(node.parent))
-                else:
-                    print('In left branch of node: ' + str(node.parent))
-            print('At depth: ' + str(depth))
-            print('Stack :' + str(list(map(lambda n: str(n), stack))))
-
-            # If we are not at the target depth yet.
+            # If we are not at the target depth yet...
             if depth < target_depth:
-                print('Overshot target value at node ' + str(node))
-                # If we have overshot the target value...
+                # and we have overshot the target value...
                 if node.val > self.target:
-                    # Remove this node from the solution path.
+                    # We are done with this sub-tree, and we back up one level.
                     node.done = True
                     stack.pop()
-                    depth -= 1
-                # Otherwise explore further down the branch.
+                # Otherwise explore further down this sub-tree.
                 else:
-                    print('Exploring further...')
-                    # If left branch has not been explored.
+                    # Expand the tree if necessary.
                     if not node.left:
-                        # Expand the tree.
-                        print('Planting tree...')
                         node.left = BTNode()
                         node.left.op = '*'
-                        node.left.parent = node
 
                         node.right = BTNode()
                         node.right.op = '+'
-                        node.right.parent = node
-                    
+                    # If left branch has not been explored...
                     if not node.left.done:
                         # Explore left branch.
-                        print('Exploring left branch.')
                         stack.append(node.left)
-                        depth += 1
+                    # Or if the right branch has not been explored...
                     elif node.left.done and not node.right.done:
                         # Explore right branch.
-                        print('Exploring right branch.')
                         stack.append(node.right)
-                        depth += 1
                     else:
-                        # Both branches explored.
-                        # Remove this node from solution path.
+                        # Otherwise both branches have been explored.
+                        # We are done with this sub-tree, and we back up one level.
                         node.done = True
                         stack.pop()
-                        depth += 1
-            elif depth == target_depth:  
-                # If node val is target value and we have the correct depth.
+            # Other if we have reached the target depth...
+            else:  
+                # and this node has the correct value...
                 if node.val == self.target:
-                    print('Found solution.')
+                    # We have found the solution and can stop.
                     self.solution = self.get_solution()
+                    self.solution_path = stack
                     break
+                # otherwise...
                 else:
+                    # We are done with this sub-tree, and we back up one level.
                     node.done = True
                     stack.pop()
-                    depth -= 1
-                
-            print('\n')
-        
 
-        if self.solution:
-            return self.solution
-
-        return self.order + ' impossible'
-
-
-    def is_solution(self):
-        """Return True if the current solution (nums and ops) produces the 
-        target value, False otherwise.
-        """
-        return self.compute() == self.target
+        return self.solution if self.solution else (self.order + ' impossible')
 
     def compute(self):
         """Use nums and ops to compute the result using left to right ordering 
