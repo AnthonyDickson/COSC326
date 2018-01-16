@@ -24,32 +24,6 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(Arithmetic('1 2 3', '9 L').order, 'L')
         self.assertEqual(Arithmetic('1 2 3', '9 L').order, 'L')
 
-    def test_compute(self):
-        """Does compute work correctly?"""
-        a = Arithmetic('1 2 3', '7 N')
-        a.ops = ['+'] * 2
-        self.assertEqual(a.compute(), 6)
-
-        a.ops = ['*'] * 2
-        self.assertEqual(a.compute(), 6)
-
-        a.order = 'L'
-        a.ops = ['+', '*']
-        self.assertEqual(a.compute(), 9)
-
-        a.ops = ['*', '+']
-        self.assertEqual(a.compute(), 5)
-
-        a.ops = ['*', '*']
-        self.assertEqual(a.compute(), 6)
-
-    def test_string_formatting(self):
-        """Do the string formatting functions work correctly?"""
-        a = Arithmetic('1 2 3', '6 L')
-        a.ops = ['+'] * 2
-        self.assertEqual(a.merge_nums_ops(), '1 + 2 + 3')
-        self.assertEqual(a.get_solution(), 'L 1 + 2 + 3')
-
     def test_solve_N(self):
         """Are N ordered problems solved correctly?"""
         self.assertFalse(Arithmetic('1 2 3', '6 N').solve() == self.N_NP)
