@@ -81,7 +81,7 @@ class Arithmetic:
                 else:
                     parent = stack[depth - 1]                
                     node.nums = parent.nums[:] + [ node.key ]
-                    node.ops = parent.ops[:] + [ node.op]
+                    node.ops = parent.ops[:] + [ node.op ]
 
                 self.nums = node.nums
                 self.ops = node.ops
