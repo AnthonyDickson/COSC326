@@ -154,7 +154,7 @@ class Arithmetic:
 def main():
     """Read two lines then print the solution to that given scenario.
 
-    Usage: python arithmetic.py < <file>"""
+    Usage: python arithmetic.py <file>"""
     lines = []
 
     for line in fileinput.input():
