@@ -16,15 +16,9 @@ Date: 13 January 2018
 
 import fileinput
 
-class BTNode:
-    """A binary-tree node."""
-    num = 0
-    value = 0
-    pending = 0
-    op = ''
-    left = None
-    right = None
-    done = False
+class Operations(Enum):
+    ADD = '+'
+    MULT = '*'
 
 class Arithmetic:
     """Given a set of numbers to use, a target value, and the order to use;
@@ -52,102 +46,64 @@ class Arithmetic:
         self.nums = list(map(int, nums.split()))
         self.target, self.order = target.split()
         self.target = int(self.target)        
-        self.solution_path = []
-        self.depth = 0
+        self.ops = []
         self.target_depth = 0
 
-    def compute_value_of(self, node, parent):
+    def search(self, value, pending):
+        depth = len(self.ops)
+        
+        if depth == self.target_depth:
+            return value == self.target
+        
+        if self.ops[depth] == Operations.MULT:
+            value *= self.nums[depth]
+        else:
+            value += self.nums[depth]
+        
+        if value >= self.target:
+            self.ops.pop()
+            return False
+        else:
+            self.ops.append(Operations.MULT)
+            
+            if self.search(value):
+                return True
+           
+            self.ops.append(Operations.ADD)
+            return self.search(value)   
+        
+
+    def compute_value_of(self, value, pending):
         """Compute node value and store the value in that node."""
         # Compute left to right.
         if self.order == 'L':
-            if node.op == '*':
-                node.value = parent.value * node.num
+            if self.ops[-1] == Operations.MULT:
+                value = value * 
             else:
                 node.value = parent.value + node.num
         # Or compute_value_of using the normal order.
         else:
-            if node.op == '*':
+            if self.ops[-1] == Operations.ADD:
                 node.pending = node.num * parent.pending
                 node.value = parent.value
             else:
                 node.value = parent.value + parent.pending
                 node.pending = node.num
 
-    def expand(self, node):
-        """Expand a node by creating two new branches."""
-        node.left = BTNode()
-        node.left.op = '*'
-
-        node.right = BTNode()
-        node.right.op = '+'
-
-    def explore(self, node):
-        """Explore a node and its children."""
-        # Expand the tree if necessary.
-        if not node.left:
-            self.expand(node)
-
-        # If left branch has not been explored...
-        if not node.left.done:
-            self.solution_path.append(node.left)
-            self.depth += 1
-        # Or if the right branch has not been explored...
-        elif node.left.done and not node.right.done:
-            self.solution_path.append(node.right)
-            self.depth += 1
-        # Otherwise if both branches have been explored...
-        else:
-            self.back_out_from(node)
-
-    def back_out_from(self, node):
-        """Back up the solution path from this node."""
-        node.done = True
-        self.solution_path.pop()
-        self.depth -= 1
-
     def solve(self):
         """Solve the problem and return the solution."""
-        root = BTNode()
-        root.num = self.nums[0]
-        self.solution_path = [ root ]
-        self.depth = 0
-        self.target_depth = len(self.nums) - 1
-
-        # Perform a depth-first search of the possible solutions.
-        while not root.done:
-            node = self.solution_path[-1]
-            node.num = self.nums[self.depth]
-
-            # Set the node value if not done already.
-            if node.value + node.pending == 0:
-                if self.depth == 0:
-                    if self.order == 'L':
-                        node.value = node.num
-                    else:
-                        node.pending = node.num
-                else:
-                    self.compute_value_of(node, parent=self.solution_path[self.depth - 1])
-
-            if self.depth < self.target_depth:
-                if node.value + node.pending > self.target:
-                    self.back_out_from(node)
-                else:
-                    self.explore(node)
-            # Otherwise if we have reached the target depth...
-            else:  
-                if node.value + node.pending == self.target:
-                    return str(self)
-                else:
-                    self.back_out_from(node)
-
+        if ((self.order == 'N' and self.search(0, self.nums[0])) or
+            (self.order == 'L' and self.search(self.nums[0], 0)):
+            return str(self)
+        
         return self.order + ' impossible'
 
     def __str__(self):
         """Return the solution as a string."""
-        result = self.order + ' ' + str(self.solution_path[0].num)
+        result = self.order + ' ' + str(self.nums[0])
 
-        for n in self.solution_path[1:]:
-            result += ' ' + n.op + ' ' + str(n.num)
+        for i, op in enumerate(self.ops):
+            result += ' ' + str(op) + ' ' + str(self.nums[i + 1])
 
         return result
 
