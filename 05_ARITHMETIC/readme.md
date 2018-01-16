@@ -1,6 +1,6 @@
 # arithmetic.py
 
-Author: Anthony Dickson
+Author: Anthony Dickson  
 January 2018
 
 Given an input of numbers, arithmetic.py tries to find a combination of addition and multiplication operations that produce the given target value.
