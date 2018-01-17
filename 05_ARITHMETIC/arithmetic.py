@@ -13,12 +13,7 @@ also separated with spaces.
 Author: Anthony Dickson
 Date: 13 January 2018
 """
-
 import fileinput
-
-class Operations(Enum):
-    ADD = '+'
-    MULT = '*'
 
 class Arithmetic:
     """Given a set of numbers to use, a target value, and the order to use;
@@ -41,69 +36,79 @@ class Arithmetic:
     >>> Arithmetic('1 2 3', '100 N')
     N impossible
     """
+    DEBUG = False
 
     def __init__(self, nums, target):        
         self.nums = list(map(int, nums.split()))
         self.target, self.order = target.split()
         self.target = int(self.target)        
         self.ops = []
-        self.target_depth = 0
-
-    def search(self, value, pending):
-        depth = len(self.ops)
-        
-        if depth == self.target_depth:
-            return value == self.target
-        
-        if self.ops[depth] == Operations.MULT:
-            value *= self.nums[depth]
-        else:
-            value += self.nums[depth]
-        
-        if value >= self.target:
-            self.ops.pop()
-            return False
-        else:
-            self.ops.append(Operations.MULT)
-            
-            if self.search(value):
-                return True
-           
-            self.ops.append(Operations.ADD)
-            return self.search(value)   
-        
-
-    def compute_value_of(self, value, pending):
-        """Compute node value and store the value in that node."""
-        # Compute left to right.
-        if self.order == 'L':
-            if self.ops[-1] == Operations.MULT:
-                value = value * 
-            else:
-                node.value = parent.value + node.num
-        # Or compute_value_of using the normal order.
-        else:
-            if self.ops[-1] == Operations.ADD:
-                node.pending = node.num * parent.pending
-                node.value = parent.value
-            else:
-                node.value = parent.value + parent.pending
-                node.pending = node.num
+        self.target_depth = len(self.nums) - 1
 
     def solve(self):
-        """Solve the problem and return the solution."""
-        if ((self.order == 'N' and self.search(0, self.nums[0])) or
-            (self.order == 'L' and self.search(self.nums[0], 0)):
+        """Try to find a solution and return it."""
+        if self.search():
             return str(self)
         
         return self.order + ' impossible'
+
+    def search(self, value=0, pending=0):
+        """Perform a depth-first search."""
+        depth = len(self.ops)
+        
+        if self.order == 'L':
+            if self.ops == []:
+                value = self.nums[depth]
+            elif self.ops[depth - 1] == '*':
+                value *= self.nums[depth]
+            else:
+                value += self.nums[depth]
+        else:
+            if self.ops == []:
+                pending = self.nums[depth]
+            elif self.ops[depth - 1] == '*':
+                pending *= self.nums[depth]
+            else:
+                value += pending
+                pending = self.nums[depth]
+
+        if depth == self.target_depth:
+            if value + pending == self.target:
+                return True
+            else:
+                # This path done.
+                self.ops.pop()
+                return False
+        
+        
+        if value + pending >= self.target:
+            # This node done.
+            self.ops.pop()
+            return False
+        else:
+            # Search left.
+            self.ops.append('*')            
+            if self.search(value, pending):
+                return True
+
+            # Search right.
+            self.ops.append('+')
+            if self.search(value, pending):
+                return True
+
+            # This node done.
+            if len(self.ops) > 0:
+                self.ops.pop()
+
+            return False         
+            
 
     def __str__(self):
         """Return the solution as a string."""
         result = self.order + ' ' + str(self.nums[0])
 
         for i, op in enumerate(self.ops):
-            result += ' ' + str(op) + ' ' + str(self.nums[i + 1])
+            result += ' ' + op + ' ' + str(self.nums[i + 1])
 
         return result
 
