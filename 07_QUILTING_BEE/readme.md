@@ -5,11 +5,11 @@ Author: Anthony Dickson
 ## Usage
 
 ```shell
-python quilting_bee.py <filename>
+java QulitingBee <filename>
 ```
 
 ```shell
-python quilting_bee.py
+java QuiltingBee
 1.0 255 0 0
 0.8 0 255 0
 0.1 0 0 255
