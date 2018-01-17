@@ -1,24 +1,16 @@
-# arithmetic.py
+# quilting_bee.py
 
 Author: Anthony Dickson
 
 ## Usage
 
 ```shell
-python arithmetic.py <filename>
+python quilting_bee.py <filename>
 ```
 
-## Example
-
-Input:  
-1 2 3  
-7 N  
-1 2 3  
-9 L  
-1 2 3  
-100 N
-
-Output:  
-N 1 + 2 * 3  
-L 1 + 2 * 3  
-N impossible
+```shell
+python quilting_bee.py
+1.0 255 0 0
+0.8 0 255 0
+0.1 0 0 255
+```
