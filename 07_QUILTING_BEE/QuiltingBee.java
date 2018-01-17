@@ -1,19 +1,27 @@
 package quiltingbee;
 
-import java.util.Arrays;
+import java.awt.*;
+import javax.swing.*;
 
 /**
  * QuiltingBee - Represents a quilt design.
  */
-public class QuiltingBee {
+public class QuiltingBee extends JPanel {   
+  
     QuiltLayer[] layers;
 
     public QuiltingBee(QuiltLayer[] layers) {
+        super();
         this.layers = layers;
     }
 
-    public QuiltLayer[] getLayers() {
-        return Arrays.copyOf(layers, layers.length);
+    @Override
+    protected void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      
+      for (QuiltLayer layer : layers) {
+        layer.paintComponent(g);
+       }
     }
 
     public String toString() {

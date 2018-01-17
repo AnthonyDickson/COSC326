@@ -7,12 +7,13 @@ import javax.swing.*;
 /**
  * QuiltingBeeApp
  */
-public class QuiltingBeeApp {
-    private static void display(QuiltingBee quilt) {
+public class QuiltingBeeApp extends JPanel {   
+  
+    private static void display(QuiltLayer[] layers) {
         JFrame frame = new JFrame("Quilting Bee");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JLabel label = new JLabel("Hello World");
-        frame.getContentPane().add(label);
+        QuiltingBee quilt = new QuiltingBee(layers);        
+        frame.getContentPane().add(quilt);
         frame.pack();
         frame.setVisible(true);
     }
@@ -31,10 +32,13 @@ public class QuiltingBeeApp {
             layer.b = line.nextInt();
             layers.add(layer);
         }
-
-        QuiltingBee quilt = new QuiltingBee(layers.toArray(new QuiltLayer[0]));
-        System.out.println(quilt);
-        display(quilt);
+        
+        SwingUtilities.invokeLater(new Runnable() {
+          public void run() {
+            display(layers.toArray(new QuiltLayer[0]));
+          }
+        });
+        
         in.close();
     }
 }
