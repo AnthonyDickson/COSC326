@@ -1,9 +1,17 @@
-build: QuiltLayer.java QuiltingBee.java QuiltingBeeApp.java
-	javac *.java -d .
+pkg = quiltingbee
+source_dir = src/$(pkg)
+source = $(source_dir)/*.java
+output_dir = $(pkg)
+output = $(pkg)/*.class
+main = $(pkg)/QuiltingBeeApp
 
-test:
-	java quiltingbee.QuiltingBeeApp < sample_input
+build: $(source)
+	mkdir -p $(output_dir)
+	javac $(source) -d .
 
-clean: 
-	rm -f *.class
-	rm -rf quiltingbee
+test: $(output)
+	java $(main) < sample_input
+
+clean:
+	rm -rf $(output_dir)
+	rm -f output.png
