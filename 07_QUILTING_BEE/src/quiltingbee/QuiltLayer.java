@@ -9,8 +9,10 @@ import java.awt.Dimension;
  * @author Anthony Dickson
  */
 class QuiltLayer {
-    /** Default values for position and size. */
+
+    /** Default width of the squares in a quilt layer. */
     static final int RECT_WIDTH = 100;
+    /** Default height of the squares in a quilt layer. */
     static final int RECT_HEIGHT = RECT_WIDTH;
 
     Color color;
@@ -32,4 +34,5 @@ class QuiltLayer {
     public String toString() {
         return String.format("[%f, %d, %d, %d]", scale, color.getRed(), color.getGreen(), color.getBlue());
     }
+    
 }

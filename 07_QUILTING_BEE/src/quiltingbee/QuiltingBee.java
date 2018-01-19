@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
  * @author Anthony Dickson
  */
 class QuiltingBee {  
+
     static enum Corners { TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT };
     static final int IMAGE_WIDTH = 800;
     static final int IMAGE_HEIGHT = 800;
@@ -63,7 +64,11 @@ class QuiltingBee {
         }
     }
 
-    /** Enqueue jobs to draw each square in the quilt design. */
+    /** 
+     * Enqueue jobs to draw each square in the quilt design. 
+     * @param i The index of the layer to add a job for.
+     * @param position Where on the screen the square should be drawn.
+     */
     void enqueueJobs(int i, Point position) {
         if (i == layers.length) return;
 
@@ -102,11 +107,6 @@ class QuiltingBee {
         }
     }
 
-    /**
-     * Return string representation of the quilt design.
-     * 
-     * @return The string representation of the quilt design.
-     */
     @Override
     public String toString() {
         String str = "";
@@ -118,7 +118,7 @@ class QuiltingBee {
         return str;
     }
 
-    /** A job of a drawing square in a quilt layer. */
+    /** A job of drawing a square in a quilt layer. */
     class DrawJob {     
         QuiltLayer layer;   
         Point position;
@@ -177,4 +177,5 @@ class QuiltingBee {
         }
 
     }
+    
 }

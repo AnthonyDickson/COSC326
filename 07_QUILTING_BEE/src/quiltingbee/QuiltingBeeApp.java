@@ -11,7 +11,7 @@ import java.util.Scanner;
  * 
  * @author Anthony Dickson
  */
-public class QuiltingBeeApp {   
+public class QuiltingBeeApp {  
 
     public static void main(String[] args) {
         Scanner line;
@@ -32,4 +32,5 @@ public class QuiltingBeeApp {
 
         in.close();
     }
+    
 }
