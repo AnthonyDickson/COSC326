@@ -49,7 +49,7 @@ class QuiltingBee {
         jobQueue.add(job);
 
         for (Corners corner : Corners.values()) {
-            enqueueJob(i + 1, job.getPosOf(corner));
+            enqueueJobs(i + 1, job.getPosOf(corner));
         }
     }
             
