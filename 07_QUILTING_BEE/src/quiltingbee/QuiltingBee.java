@@ -66,7 +66,7 @@ class QuiltingBee {
     /** Enqueue jobs to draw each square in the quilt design. */
     void enqueueJobs(int i, Point position) {
         if (i == layers.length) return;
-        
+
         DrawJob job = new DrawJob(layers[i], position, i);        
         jobQueue.add(job);
 
@@ -82,22 +82,6 @@ class QuiltingBee {
         while (!jobQueue.isEmpty()) {
            jobQueue.poll().draw(g2);
         }
-    }
-
-    /**
-     * Write the quilt design to file using the default settings.
-     */
-    void write() {
-        write("output");
-    }
-
-    /**
-     * Write the quilt design to file using the default file extension.
-     * 
-     * @param name The name of the file to write to.
-     */
-    void write(String name) {
-        write(name, "png");
     }
 
     /**
@@ -135,17 +119,17 @@ class QuiltingBee {
     }
 
     /** A job of a drawing square in a quilt layer. */
-    class DrawJob extends QuiltLayer {        
+    class DrawJob {     
+        QuiltLayer layer;   
         Point position;
         int priority;
         
         public DrawJob(QuiltLayer layer, Point position, int priority) {
-            super(layer);
-            
             // Adjust position to take layer dimensions into account.
             position.x -= (int)(0.5 * layer.size.width);
             position.y -= (int)(0.5 * layer.size.height);
             
+            this.layer = layer;
             this.position = position;
             this.priority = priority;
         }
@@ -157,6 +141,8 @@ class QuiltingBee {
          * @return The position of the corner.
          */
         Point getPosOf(Corners corner) {
+            Dimension size = layer.size;
+
             if (corner == Corners.TOP_LEFT) {
                 return new Point(position);
             }
@@ -174,8 +160,8 @@ class QuiltingBee {
         }
         
         void draw(Graphics2D g) {
-            g.setColor(color);
-            g.fillRect(position.x, position.y, size.width, size.height);
+            g.setColor(layer.color);
+            g.fillRect(position.x, position.y, layer.size.width, layer.size.height);
         }
 
         @Override

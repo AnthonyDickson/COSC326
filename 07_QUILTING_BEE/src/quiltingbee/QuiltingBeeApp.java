@@ -28,7 +28,7 @@ public class QuiltingBeeApp {
         }
 
         QuiltingBee quilt = new QuiltingBee(layers.toArray(new QuiltLayer[layers.size()]));
-        quilt.write();
+        quilt.write("output", "png");
 
         in.close();
     }
