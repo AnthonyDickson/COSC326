@@ -9,9 +9,14 @@ build: $(source)
 	mkdir -p $(output_dir)
 	javac $(source) -d .
 
-test: $(output)
+samples: $(output)
 	java $(main) < sample1
-
+	mv output.png sample1.png
+	java $(main) < sample2
+	mv output.png sample2.png
+	java $(main) < sample3
+	mv output.png sample3.png
+	
 clean:
 	rm -rf $(output_dir)
-	rm -f output.png
+	rm -f *.png
