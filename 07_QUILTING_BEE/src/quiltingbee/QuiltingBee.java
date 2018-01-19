@@ -1,6 +1,7 @@
 package quiltingbee;
 
-import java.util.ArrayDeque;
+import java.util.PriorityQueue;
+import java.util.Comparator;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -21,14 +22,14 @@ class QuiltingBee {
     QuiltLayer[] layers;
     BufferedImage output;
     Graphics2D g2;
-    ArrayDeque<DrawJob> jobQueue;
+    PriorityQueue<DrawJob> jobQueue;
 
     public QuiltingBee(QuiltLayer[] layers) {
         this.layers = layers;
         this.output = new BufferedImage(IMAGE_WIDTH, IMAGE_HEIGHT, 
                                         BufferedImage.TYPE_INT_ARGB);
         this.g2 = this.output.createGraphics();
-        this.jobQueue = new ArrayDeque<>();
+        this.jobQueue = new PriorityQueue<>(21, new DrawJobComparator());
 
         process();
     }
@@ -45,16 +46,16 @@ class QuiltingBee {
      * image. 
      */
     void fitToSize() {
-        int width = 0;
-        int height = 0;
+        int designWidth = 0;
+        int designHeight = 0;
 
         for (QuiltLayer layer : layers) {
-            width += layer.size.width;
-            height += layer.size.height;
+            designWidth += layer.size.width;
+            designHeight += layer.size.height;
         }
 
-        float widthRatio = (float)IMAGE_WIDTH / width;
-        float heightRatio = (float)IMAGE_HEIGHT / height;
+        float widthRatio = (float)IMAGE_WIDTH / designWidth;
+        float heightRatio = (float)IMAGE_HEIGHT / designHeight;
 
         for (QuiltLayer layer : layers) {
             layer.size.width = (int)(widthRatio * layer.size.width);
@@ -66,7 +67,7 @@ class QuiltingBee {
     void enqueueJobs(int i, Point position) {
         if (i == layers.length) return;
         // TODO: Draw by layer.
-        DrawJob job = new DrawJob(layers[i], position, g2);        
+        DrawJob job = new DrawJob(layers[i], position, i);        
         jobQueue.add(job);
 
         for (Corners corner : Corners.values()) {
@@ -79,7 +80,7 @@ class QuiltingBee {
      */
     void draw() {
         while (!jobQueue.isEmpty()) {
-           jobQueue.poll().draw();
+           jobQueue.poll().draw(g2);
         }
     }
 
@@ -136,9 +137,9 @@ class QuiltingBee {
     /** A job of a drawing square in a quilt layer. */
     class DrawJob extends QuiltLayer {        
         Point position;
-        Graphics2D g;
+        int priority;
         
-        public DrawJob(QuiltLayer layer, Point position, Graphics2D g) {
+        public DrawJob(QuiltLayer layer, Point position, int priority) {
             super(layer);
             
             // Adjust position to take layer dimensions into account.
@@ -146,7 +147,7 @@ class QuiltingBee {
             position.y -= (int)(0.5 * layer.size.height);
             
             this.position = position;
-            this.g = g;
+            this.priority = priority;
         }
         
         /**
@@ -172,7 +173,7 @@ class QuiltingBee {
             return null;
         }
         
-        void draw() {
+        void draw(Graphics2D g) {
             g.setColor(color);
             g.fillRect(position.x, position.y, size.width, size.height);
         }
@@ -181,5 +182,13 @@ class QuiltingBee {
         public String toString() {
             return super.toString() + " " + position;
         }
+    }
+
+    class DrawJobComparator implements Comparator<DrawJob> {
+        @Override
+        public int compare(DrawJob x, DrawJob y) {
+            return x.priority - y.priority;
+        }
+
     }
 }
