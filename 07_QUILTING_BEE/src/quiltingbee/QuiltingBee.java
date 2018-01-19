@@ -66,7 +66,7 @@ class QuiltingBee {
     /** Enqueue jobs to draw each square in the quilt design. */
     void enqueueJobs(int i, Point position) {
         if (i == layers.length) return;
-        // TODO: Draw by layer.
+        
         DrawJob job = new DrawJob(layers[i], position, i);        
         jobQueue.add(job);
 
