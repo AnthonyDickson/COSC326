@@ -14,8 +14,6 @@ import javax.imageio.ImageIO;
  */
 class QuiltingBee {  
     static enum Corners { TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT };
-    static final int RECT_WIDTH = 100;
-    static final int RECT_HEIGHT = 100;
     static final int IMAGE_WIDTH = 800;
     static final int IMAGE_HEIGHT = 800;
     static final Point CENTER = new Point(IMAGE_WIDTH / 2, IMAGE_HEIGHT / 2);
@@ -37,14 +35,37 @@ class QuiltingBee {
     
     /** Process the quilt design and prepare it for writing to file. */
     void process() {
+        fitToSize();
         enqueueJobs(0, CENTER);
         draw();
+    }
+
+    /** 
+     * Adjust the layer sizes such that the entire quilt design will fill the 
+     * image. 
+     */
+    void fitToSize() {
+        int width = 0;
+        int height = 0;
+
+        for (QuiltLayer layer : layers) {
+            width += layer.size.width;
+            height += layer.size.height;
+        }
+
+        float widthRatio = (float)IMAGE_WIDTH / width;
+        float heightRatio = (float)IMAGE_HEIGHT / height;
+
+        for (QuiltLayer layer : layers) {
+            layer.size.width = (int)(widthRatio * layer.size.width);
+            layer.size.height = (int)(heightRatio * layer.size.height);
+        }
     }
 
     /** Enqueue jobs to draw each square in the quilt design. */
     void enqueueJobs(int i, Point position) {
         if (i == layers.length) return;
-        
+        // TODO: Draw by layer.
         DrawJob job = new DrawJob(layers[i], position, g2);        
         jobQueue.add(job);
 

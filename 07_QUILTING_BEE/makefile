@@ -10,7 +10,7 @@ build: $(source)
 	javac $(source) -d .
 
 test: $(output)
-	java $(main) < sample_input
+	java $(main) < sample1
 
 clean:
 	rm -rf $(output_dir)
