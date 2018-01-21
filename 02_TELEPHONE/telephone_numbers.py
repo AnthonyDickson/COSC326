@@ -105,10 +105,10 @@ class TelephoneNumber:
 
         # Get the formatted string.
         if self.is_valid():
+            self.formatted = self.standard_format()
+
             if self.is_duplicate():
                 self.formatted = self.duplicate_format()
-            else:
-                self.formatted = self.standard_format()
         else:
             self.formatted = self.invalid_format()
 
