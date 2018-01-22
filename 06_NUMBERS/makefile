@@ -1,13 +1,9 @@
-source = src/numbers
-output = numbers
+src = src/numbers
+out = numbers
 
-build: $(source)/*.java
-	mkdir -p $(output)
-	javac $(source)/*.java -d $(output)
 
-run:
-	java $(output)/NumbersApp
+build: $(src)/*.java
+	javac $(src)/*.java -d .
 
 clean:
-	rm -rf bin
-	rm -r *~
+	rm -rf numbers
