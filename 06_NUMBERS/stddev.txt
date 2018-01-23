@@ -1,0 +1,336 @@
+################################################################################
+Test #1
+n=100
+c=0
+
+Method (1):
+Single Precision: 
+σ=27.901434
+Double Precision: 
+σ=27.90143365492175
+
+Method (2):
+Single Precision: 
+σ=27.90079
+Double Precision: 
+σ=27.900786727259145
+################################################################################
+Test #2
+n=100
+c=0
+
+Method (1):
+Single Precision: 
+σ=28.8704
+Double Precision: 
+σ=28.8704000665041
+
+Method (2):
+Single Precision: 
+σ=28.86607
+Double Precision: 
+σ=28.86607004772212
+################################################################################
+Test #3
+n=100
+c=10
+
+Method (1):
+Single Precision: 
+σ=27.901434
+Double Precision: 
+σ=27.90143365492175
+
+Method (2):
+Single Precision: 
+σ=27.90079
+Double Precision: 
+σ=27.900786727259145
+################################################################################
+Test #4
+n=100
+c=10000
+
+Method (1):
+Single Precision: 
+σ=27.901434
+Double Precision: 
+σ=27.90143365492175
+
+Method (2):
+Single Precision: 
+σ=27.90079
+Double Precision: 
+σ=27.900786727259145
+################################################################################
+Test #5
+n=100
+c=100000
+
+Method (1):
+Single Precision: 
+σ=27.901434
+Double Precision: 
+σ=27.90143365492175
+
+Method (2):
+Single Precision: 
+σ=27.712812
+Double Precision: 
+σ=27.900786727149764
+################################################################################
+Test #6
+n=100
+c=-10000
+
+Method (1):
+Single Precision: 
+σ=27.901434
+Double Precision: 
+σ=27.90143365492175
+
+Method (2):
+Single Precision: 
+σ=36.203865
+Double Precision: 
+σ=27.900786708008454
+################################################################################
+Test #7
+n=100
+c=0
+
+Method (1):
+Single Precision: 
+σ=28.496141
+Double Precision: 
+σ=28.496140089492823
+
+Method (2):
+Single Precision: 
+σ=28.495928
+Double Precision: 
+σ=28.495927779245932
+################################################################################
+Test #8
+n=100
+c=10
+
+Method (1):
+Single Precision: 
+σ=31.091316
+Double Precision: 
+σ=31.09131711587658
+
+Method (2):
+Single Precision: 
+σ=31.090738
+Double Precision: 
+σ=31.090736562519712
+################################################################################
+Test #9
+n=100
+c=10000
+
+Method (1):
+Single Precision: 
+σ=31.08199
+Double Precision: 
+σ=31.081988353385633
+
+Method (2):
+Single Precision: 
+σ=30.859682
+Double Precision: 
+σ=31.06621798670883
+################################################################################
+Test #10
+n=100
+c=10000000
+
+Method (1):
+Single Precision: 
+σ=27.100739
+Double Precision: 
+σ=27.100737997331365
+
+Method (2):
+Single Precision: 
+σ=3276.8
+Double Precision: 
+σ=27.092065259038485
+################################################################################
+Test #11
+n=100
+c=-10000
+
+Method (1):
+Single Precision: 
+σ=28.594755
+Double Precision: 
+σ=28.594754763767426
+
+Method (2):
+Single Precision: 
+σ=28.261635
+Double Precision: 
+σ=28.584114469377464
+################################################################################
+Test #12
+n=100
+c=-10000000
+
+Method (1):
+Single Precision: 
+σ=29.316208
+Double Precision: 
+σ=29.31620712165883
+
+Method (2):
+Single Precision: 
+σ=NaN
+Double Precision: 
+σ=29.31552489722809
+################################################################################
+Test #13
+n=1000
+c=0
+
+Method (1):
+Single Precision: 
+σ=292.04047
+Double Precision: 
+σ=292.0413326911107
+
+Method (2):
+Single Precision: 
+σ=292.0414
+Double Precision: 
+σ=292.0413217337574
+################################################################################
+Test #14
+n=10000
+c=0
+
+Method (1):
+Single Precision: 
+σ=2905.7715
+Double Precision: 
+σ=2905.769671326342
+
+Method (2):
+Single Precision: 
+σ=2905.776
+Double Precision: 
+σ=2905.769529084397
+################################################################################
+Test #15
+n=100000
+c=0
+
+Method (1):
+Single Precision: 
+σ=51790.348
+Double Precision: 
+σ=51790.93600560063
+
+Method (2):
+Single Precision: 
+σ=57292.45
+Double Precision: 
+σ=57292.92960072152
+################################################################################
+Test #16
+n=1000000
+c=0
+
+Method (1):
+Single Precision: 
+σ=575704.8
+Double Precision: 
+σ=575809.3169027829
+
+Method (2):
+Single Precision: 
+σ=577068.3
+Double Precision: 
+σ=577170.469169981
+################################################################################
+Test #17
+n=7
+c=0
+
+Method (1):
+Single Precision: 
+σ=1.8516402
+Double Precision: 
+σ=1.8516401995451028
+
+Method (2):
+Single Precision: 
+σ=1.7612611
+Double Precision: 
+σ=1.761261143705422
+################################################################################
+Test #18
+n=775585
+c=0
+
+Method (1):
+Single Precision: 
+σ=447564.5
+Double Precision: 
+σ=447616.7790107431
+
+Method (2):
+Single Precision: 
+σ=447423.94
+Double Precision: 
+σ=447476.46364418085
+################################################################################
+Test #19
+n=718627
+c=8
+
+Method (1):
+Single Precision: 
+σ=414288.06
+Double Precision: 
+σ=414329.869610921
+
+Method (2):
+Single Precision: 
+σ=414916.0
+Double Precision: 
+σ=414957.73858272267
+################################################################################
+Test #20
+n=91292
+c=24
+
+Method (1):
+Single Precision: 
+σ=53921.33
+Double Precision: 
+σ=53921.4786761448
+
+Method (2):
+Single Precision: 
+σ=52725.848
+Double Precision: 
+σ=52725.988851171045
+################################################################################
+Test #21
+n=4652
+c=802
+
+Method (1):
+Single Precision: 
+σ=1339.851
+Double Precision: 
+σ=1339.8487119586416
+
+Method (2):
+Single Precision: 
+σ=1339.8506
+Double Precision: 
+σ=1339.8483655580785

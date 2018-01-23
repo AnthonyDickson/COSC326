@@ -3,117 +3,159 @@ package numbers;
 import java.util.*;
 
 public class StandardDeviation {
-  static double number;
-  static double fixedValue;
+	static final Random rand = new Random();
+	static int testCount = 0;
 
-  public static double sumOfValue() {
-    double total = 0.0;
+	int n;
+	int[] a;
+	int c;
 
-    for(double i = 1.0; i <= number; i++) {
-      total += i;
-    }
+	public StandardDeviation() {
+		this(100, 0);
+	}
+	
+	public StandardDeviation(int n, int c) {
+		this.n = n;
+		this.a = arrayOfRandInts(n);
+		this.c = c;
 
-    return total;
-  }
+		for (int i = 0; i < n; i++) {
+			a[i] += + c;
+		}
 
-  public static double sumOfSquare() {
-    double total = 0.0;
-    for (double i = 1.0; i <= number; i++) {
-      total += Math.pow(i, 2);
-    }
+		run();
+	}
+	
+	public StandardDeviation(int n, int c, int[] a) {
+		this.n = n;
+		this.a = a.clone();
+		this.c = c;
 
-    return total;
-  }
+		for (int i = 0; i < n; i++) {
+			a[i] += + c;
+		}
 
-  public static double sovFixed() {
-    double total = 0.0;
+		run();
+	}
+	
+	void run() {
+		System.out.println("################################################################################");
+		System.out.println("Test #" + ++testCount);
+		// System.out.println("a=" + Arrays.toString(a));
+		System.out.println("n=" + n);
+		System.out.println("c=" + c);
+		System.out.println("\nMethod (1):");
+		method1();
+		System.out.println("\nMethod (2):");
+		method2();
+	}
+	  
+	void method1() {
+		// Single Precision
+		float avg = sum(a) / n;
+		float squareDiffSum = 0;
+		
+		for (int i = 0; i < n; i++) {
+			squareDiffSum += (float) Math.pow(a[i] - avg, 2);
+		}
+		
+		float sdFloat = (float) Math.sqrt(squareDiffSum / n);
+		System.out.println("Single Precision: ");
+		System.out.println("σ=" + sdFloat); 
+		
+		// Double Precision
+		double avg2 = sum(a) / n;
+		double squareDiffSum2 = 0;
+		
+		for (int i = 0; i < n; i++) {
+			squareDiffSum2 += Math.pow(a[i] - avg2, 2);
+		}
 
-    for(double i = 1.0; i <= number; i++){
-      total += i;
-      total += fixedValue;
-    }
+		double sdDouble = Math.sqrt(squareDiffSum2 / n);
+		System.out.println("Double Precision: ");
+		System.out.println("σ=" + sdDouble); 
+	}
+	  
+	void method2() {
+		// Single Precision
+		float squareSum = 0;
 
-    return total;
-  }
+		for (int i = 0; i < n; i++) {
+			squareSum += (float) Math.pow(a[i], 2);
+		}
 
-  public static double sosFixed() {
-    double total = 0.0;
+		float sumSquared = (float) Math.pow(sum(a), 2);
+		
+		float sdFloat = (float) Math.sqrt((squareSum - sumSquared / n) / n);
+		System.out.println("Single Precision: ");
+		System.out.println("σ=" + sdFloat); 
 
-    for(double i = 1.0; i <= number; i++) {
-      total += Math.pow((i + fixedValue), 2);
-    }
+		// Double Precision
+		double squareSum2 = 0;
 
-    return total;
-  }
+		for (int i = 0; i < n; i++) {
+			squareSum2 += Math.pow(a[i], 2);
+		}
 
-  public static void method1() {
-    float sMean = (float) sumOfValue() / (float) number;
-    float sTotal = 0.0f;
-    float sSd = 0.0f;
+		double sumSquared2 = Math.pow(sum(a), 2);
+		
+		double sdDouble = Math.sqrt((squareSum2 - sumSquared2 / n) / n);
+		System.out.println("Double Precision: ");
+		System.out.println("σ=" + sdDouble); 
+	}
 
-    double dMean = sumOfValue() / number;
-    double dTotal = 0.0;
-    double dSd = 0.0;
+	public static int sum(int[] a) {
+		int sum = 0;
 
-    for (double n = 1.0f;n <= number; n++) {
-      sTotal += Math.pow((n - sMean),2);
-      dTotal += Math.pow((n - dMean),2);
-    }
+		for (int i = 0; i < a.length; i++) {
+			sum += a[i];
+		}
 
-    sSd = (float)Math.sqrt(sTotal / number);
-    dSd = Math.sqrt(dTotal / number);
-    System.out.println("Method-1 Output Single Precision: " + sSd + "  Double Precision: " + dSd);
+		return sum;
+	}
 
-    float sMeanFixed = (float) sovFixed() / (float) number;
-    float sTotalFixed = 0.0f;
-    float sSdFixed = 0.0f;
+	public static int[] arrayOfInts(int n) {
+		int[] a = new int[n];
 
-    double dMeanFixed = sovFixed() / number;
-    double dTotalFixed = 0.0;
-    double dSdFixed = 0.0;
+		for (int i = 0; i < n; i++) {
+			a[i] = i;
+		}
 
-    for (double n = 1.0f; n <= number; n++){
-      sTotalFixed += Math.pow((n - sMeanFixed),2);
-      dTotalFixed += Math.pow((n - dMeanFixed),2);
-    }
+		return a;
+	}
 
-    sSdFixed = (float) Math.sqrt(sTotalFixed / number);
-    dSdFixed = Math.sqrt(dTotalFixed / number);
-    System.out.println("Method-1 Output with added Fixed Value [ " + fixedValue + " ] Single Precision: " + sSdFixed + "  Double Precision: " + dSdFixed);
-  }
+	public static int[] arrayOfRandInts(int n) {
+		int[] a = new int[n];
 
-  public static void method2() {
-    double squaresSum = sumOfSquare();
-    double sumsSquare = Math.pow(sumOfValue(), 2);
-    float sSd = 0.0f;
-    double dSd = 0.0;
-    sSd = (float)Math.sqrt(((float) squaresSum - ((float) sumsSquare / (float) number)) / (float) number);
-    dSd = Math.sqrt((squaresSum - (sumsSquare/number)) / number);
-    System.out.println("Method-2 Output Single Precision: " + sSd + "  Double Precision:" + dSd);
+		for (int i = 0; i < n; i++) {
+			a[i] = rand.nextInt(n);
+		}
 
-    double squaresSumFixed = sosFixed();
-    double sumsSquareFixed = Math.pow(sovFixed(),2);
-    float sSdFixed = 0.0f;
-    double dSdFixed = 0.0;
-    sSdFixed = (float) Math.sqrt(((float) squaresSumFixed - ((float) sumsSquareFixed / (float) number)) / (float) number);
-    dSdFixed = Math.sqrt((squaresSumFixed - (sumsSquareFixed/number)) / number);
-    System.out.println("Method-2 Output with added Fixed Value [ " + fixedValue + " ] Single Precision: " + sSdFixed + "  Double Precision:" + dSdFixed);
-
-  }
-
-  public static void main(String args[]) {
-    StandardDeviation.number = 10000;
-    StandardDeviation.fixedValue = 1;
-
-    if(args.length > 0) {
-      StandardDeviation.number = Double.parseDouble(args[0]);
-    }
-
-    if(args.length > 1) {
-      StandardDeviation.fixedValue = Double.parseDouble(args[1]);
-    }
-
-    StandardDeviation.method1();
-    StandardDeviation.method2();
-  }
+		return a;
+	}
+	
+	public static void main(String[] args) {
+		int[] a = arrayOfRandInts(100);
+		new StandardDeviation(100, 0, a); 
+		new StandardDeviation(100, 0, arrayOfInts(100)); 
+		new StandardDeviation(100, 10, a); 
+		new StandardDeviation(100, 10000, a); 
+		new StandardDeviation(100, 100000, a); 
+		new StandardDeviation(100, -10000, a); 
+		new StandardDeviation(100, 0); 
+		new StandardDeviation(100, 10); 
+		new StandardDeviation(100, 10000); 
+		new StandardDeviation(100, 1000000); 
+		new StandardDeviation(100, -10000); 
+		new StandardDeviation(100, -1000000); 
+		new StandardDeviation(1000, 0); 
+		new StandardDeviation(10000, 0); 
+		new StandardDeviation(100000, 0); 
+		new StandardDeviation(1000000, 0); 
+		new StandardDeviation(rand.nextInt(20), 0); 
+		new StandardDeviation(rand.nextInt(1000000), 0); 
+		new StandardDeviation(rand.nextInt(1000000), rand.nextInt(10)); 
+		new StandardDeviation(rand.nextInt(1000000), rand.nextInt(100)); 
+		new StandardDeviation(rand.nextInt(1000000), rand.nextInt(1000)); 
+	}
 }
