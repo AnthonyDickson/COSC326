@@ -1,4 +1,5 @@
 \documentclass[12pt]{article} 
+\usepackage{amssymb}
 \begin{document}
 	
 \begin{center}
@@ -8,37 +9,89 @@
 Pair Members: Anthony Dickson, Marcus Lee
 \end{center}
 
+\paragraph{} In this report we will consider results that are within 5\% of eachother to agree. 
+
 \section{Harmonic Numbers}
-\paragraph{Definition}
+\paragraph{Harmonic Numbers}
 	The harmonic numbers are defined as the initial partial sums of the series:
-	{\large $$\frac{1}{1} + \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + ....$$}\\
+	
+	{\large $$\frac{1}{1} + \frac{1}{2} + \frac{1}{3} + \frac{1}{4} + \ldots$$}\\
 	The above can also be represented as follows:
-	{\large $$H(n)\ = \ \frac{1}{1} \ + \ \frac{1}{2} \ + \ \frac{1}{3} \ + \ .... \ +  \ \frac{1}{n-1} \ + \ \frac{1}{n}$$}
+	
+	{\large $$H(n)\ = \ \frac{1}{1} \ + \ \frac{1}{2} \ + \ \frac{1}{3} \ + \ \ldots \ +  \ \frac{1}{n-1} \ + \ \frac{1}{n}$$}
 
 \paragraph{Method}
-	Using the above formula, we created a java application which calculates $H(n)$ using both single and double precision floating point numbers. Our java application computes $H(n)$ in both order of largest term first ($\frac{1}{1} + \frac{1}{2} +  .... + \frac{1}{n}$) and reverse order ($\frac{1}{n} + \frac{1}{n - 1} +  .... + \frac{1}{1}$). The results for calculating $H(10000)$ are shown below in figure 1.1.
+	Using the above formula, we created a java application which calculates $H(n)$ using both single and double precision floating point numbers. Our java application computes $H(n)$ in both order of largest term first ($\frac{1}{1} + \frac{1}{2} +  \ldots + \frac{1}{n}$) and reverse order ($\frac{1}{n} + \frac{1}{n - 1} +  \ldots + \frac{1}{1}$). 
 
 \begin{figure}[h]
-	\textbf{Figure 1.1: Results of calculating $H(10000)$.}\\
+	\textbf{Figure 1.1: Results of calculating $H(10,000)$.}\\
 	
-	Largest Term First:\\
+	Comparison of Single and Double Precision\\
+	Largest Term First\\
 	Single Precision: $9.787613$\\
 	Double Precision: $9.787606036044348$\\
+	Percent Difference: $< 0.01\%$\\
+	agree: true\\
 	
-	Reverse order:\\
+	Reverse Order\\
 	Single Precision: $9.787604$\\
-	Double Precision: $9.787604$	
+	Double Precision: $9.787606036044386$\\
+	Percent Difference: $< 0.01\%$\\
+	agree: true\\
 \end{figure}
 
 \paragraph{Observations}
-As we can see in figure 1.1, the results for $H(10000)$ computed from largest term first are different when using single and double precision numbers. However, the single and double precision results are the same when  $H(10000)$ was calculated in reverse order. Furthermore, the single precision results and the double precision results are different based on the order that the terms were added together. These obversations can be seen in $H(n)$ for values on either side of $10000$ as shown in figure 1.2 and figure 1.3.
+\subparagraph{Largest Term First}
+The results for both single and double precision agree up to somewhere around $n=10,000,000$. At $n=10,000,000$ there is a $8.05\%$ difference between the single and double precision results (figure 1.2). At $n=100,000,000$ the difference is $20.90\%$, and at $n=1,000,000,000$ the difference is $32.13\%$.
 
-However, the single and double precision results for reverse order in figure 1.3 show a small difference ($0.000001$). So perhaps $H(n)$ calculated in reverse order is infact different for single and double precision numbers (albeit very slightly and perhaps not significantly).	
+\subparagraph{Reverse Order}
+When computing harmonic numbers in reverse order, both the single and double precision answers agree. The double precision result also remains consistent with the double precision results computed in order of largest term first.
 
-\paragraph{Conclusion}
-Computing harmonic numbers in both single and double precision did not produce answers that agree. The harmonic numbers computed in single precision tended to be slightly bigger than the harmonic numbers computed in double precision, but only had about half the number of digits. 
+Although in practice the order in which terms are added together does not matter, it seems to matter quite a bit when using floating point numbers. Its importance can be seen when computing harmonic numbers for where $n>1,000,000$. Reverse order seems to eliminate some of the inaccuracy of single precision numbers. Based on our observations, reverse order seems to be more accurate than largest term first, however we are not sure on how to test this hypothesis.
 
-Computing harmonic numbers in reverse order produced results that mostly agree, and also differed to the results that were produced when computing from the largest term first. However, the results that differ only differ by a very small amount and the difference could be considered to be insignificant.
+\subparagraph{Single Precision Inaccuracy}
+We think that the inconsistencies in the single precision results are due to the way binary fractions work. Some fractions cannot not be accurately represented in binary, similar to how fractions like 1/3, 1/6 and 1/9 cannot be accurately represented in decimal. 
+
+The fraction $\frac{1}{10}$ can be represented as $0.1$ in decimal, or even as $0 \times 10^{0} + 1 \times 10^{-1}$. Binary fractions are similar, but instead of base $10$, they use base $2$. So the binary fraction 0.11 could be represented as $0 \times 2^{0} + 1 \times 2^{-1} + 1 \times 2^{-2} $, or $0 + \frac{1}{2} + \frac{1}{4}$, or even $0.75$. 
+
+This works fine for some numbers (in particular fractions where the denominator is a power of 2), but not all numbers can represented exactly in binary fractions. For example, in binary the fraction $\frac{1}{10}$ is represented in binary as $0.0\overline{0011}$. When converted to decimal, this binary fraction produces the number $0.100000001490116125$. From this, it is clear that adding many binary fractions together is bound to be innacurate.
+
+\begin{figure}[h]
+	\textbf{Figure 1.2: Results of calculating $H(10,000,000)$.}\\
+	
+	Comparison of Single and Double Precision\\
+	Largest Term First\\
+	Single Precision: $15.403683$\\
+	Double Precision: $16.695311365857272$\\
+	Percent Difference: $8.05\%$\\
+	agree: false\\
+	
+	Reverse Order\\
+	Single Precision: $16.686031$\\
+	Double Precision: $16.695311365859965$\\
+	Percent Difference: $0.06\%$\\
+	agree: true\\
+	
+	Comparison of Computation Orders\\
+	Single Precision\\
+	Largest Term First: $15.403683$\\
+	Reverse Order: $16.686031$\\
+	Percent Difference: $7.99\%$\\
+	agree: false\\
+	
+	Double Precision\\
+	Largest Term First: $16.695311365857272$\\
+	Reverse Order: $16.695311365859965$\\
+	Percent Difference: $< 0.01\%$\\
+	agree: true
+\end{figure}
+
+\paragraph{Summary}
+The result is bound to be innaccurate when adding a large number of single precision floating point numbers together.
+
+Double precision numbers seem to have enough precision that they do not suffer as much from the issues that single precision numbers do. The double precision results remained consistent up to the harmonic number where $n=1,000,000,000$.
+
+Computing harmonic numbers in reverse order seems to remedy some of the innaccuracy of single precision numbers.
 
 
 \section{Standard Deviation}
@@ -104,31 +157,7 @@ $\bullet$ Method one should generally be preferred over method two because metho
 
 \paragraph{} As per the above output for different inputs, Single precision till single decimal points satisfy the equation. if there are more than one decimals after points then even for single precision point equations fails even though it is mathematically correct. In case of Double precision it fails every time irrespective of given input.
 
-\newpage
 \section{Figures}
-\begin{figure}[h]
-	\textbf{Figure 1.1: Results of calculating $H(10000)$.}\\
-	
-	Largest Term First:\\
-	Single Precision: $9.787613$\\
-	Double Precision: $9.787606036044348$\\
-	
-	Reverse order:\\
-	Single Precision: $9.787604$\\
-	Double Precision: $9.787604$	
-\end{figure}
-
-\begin{figure}[h]
-	\textbf{Figure 1.2: Results of calculating $H(1000)$.}\\
-	Largest Term First:\\
-	Single Precision: $7.48547843$\\
-	Double Precision: $7.485470860550343$\\
-	
-	Reverse order:\\
-	Single Precision: $7.4854717$\\
-	Double Precision: $7.4854717$
-\end{figure}
-
 \begin{figure}[h]
 	\textbf{Figure 1.3: Results of calculating $H(100000)$.}\\
 	Largest Term First:\\

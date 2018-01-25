@@ -274,3 +274,26 @@ LHS: -1.9263418214378932E8
 RHS: -2.01326592E8
 Percent Error: 4.51%
 agree: true
+################################################################################
+Test #13
+x: 879419.13245
+y: 2.5
+
+Comparison of Single and Double Precision
+Single Precision: 879419.0
+Double Precision: 879419.1324500004
+Percent Difference: < 0.01%
+agree: true
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 879419.1
+RHS: 879419.0
+Percent Error: < 0.01%
+agree: true
+
+Double Precision
+LHS: 879419.13245
+RHS: 879419.1324500004
+Percent Error: < 0.01%
+agree: true
