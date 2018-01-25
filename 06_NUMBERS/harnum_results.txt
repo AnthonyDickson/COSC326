@@ -1,0 +1,280 @@
+################################################################################
+Test #1
+
+Comparison of Single and Double Precision
+H(1)
+Single Precision: 1.0
+Double Precision: 1.0
+Percent Difference: 0.00%
+agree: true
+
+H(1) (Reverse Order)
+Single Precision: 1.0
+Double Precision: 1.0
+Percent Difference: 0.00%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(1): 1.0
+H(1) (Reverse Order): 1.0
+Percent Difference: 0.00%
+agree: true
+
+Double Precision
+H(1): 1.0
+H(1) (Reverse Order): 1.0
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #2
+
+Comparison of Single and Double Precision
+H(10)
+Single Precision: 2.9289684
+Double Precision: 2.9289682539682538
+Percent Difference: < 0.01%
+agree: true
+
+H(10) (Reverse Order)
+Single Precision: 2.9289684
+Double Precision: 2.9289682539682538
+Percent Difference: < 0.01%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(10): 2.9289684
+H(10) (Reverse Order): 2.9289684
+Percent Difference: 0.00%
+agree: true
+
+Double Precision
+H(10): 2.9289682539682538
+H(10) (Reverse Order): 2.9289682539682538
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #3
+
+Comparison of Single and Double Precision
+H(100)
+Single Precision: 5.187378
+Double Precision: 5.187377517639621
+Percent Difference: < 0.01%
+agree: true
+
+H(100) (Reverse Order)
+Single Precision: 5.187377
+Double Precision: 5.1873775176396215
+Percent Difference: < 0.01%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(100): 5.187378
+H(100) (Reverse Order): 5.187377
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+H(100): 5.187377517639621
+H(100) (Reverse Order): 5.1873775176396215
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #4
+
+Comparison of Single and Double Precision
+H(1000)
+Single Precision: 7.4854784
+Double Precision: 7.485470860550343
+Percent Difference: < 0.01%
+agree: true
+
+H(1000) (Reverse Order)
+Single Precision: 7.4854717
+Double Precision: 7.485470860550341
+Percent Difference: < 0.01%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(1000): 7.4854784
+H(1000) (Reverse Order): 7.4854717
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+H(1000): 7.485470860550343
+H(1000) (Reverse Order): 7.485470860550341
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #5
+
+Comparison of Single and Double Precision
+H(10000)
+Single Precision: 9.787613
+Double Precision: 9.787606036044348
+Percent Difference: < 0.01%
+agree: true
+
+H(10000) (Reverse Order)
+Single Precision: 9.787604
+Double Precision: 9.787606036044386
+Percent Difference: < 0.01%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(10000): 9.787613
+H(10000) (Reverse Order): 9.787604
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+H(10000): 9.787606036044348
+H(10000) (Reverse Order): 9.787606036044386
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #6
+
+Comparison of Single and Double Precision
+H(100000)
+Single Precision: 12.090851
+Double Precision: 12.090146129863335
+Percent Difference: < 0.01%
+agree: true
+
+H(100000) (Reverse Order)
+Single Precision: 12.090153
+Double Precision: 12.090146129863408
+Percent Difference: < 0.01%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(100000): 12.090851
+H(100000) (Reverse Order): 12.090153
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+H(100000): 12.090146129863335
+H(100000) (Reverse Order): 12.090146129863408
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #7
+
+Comparison of Single and Double Precision
+H(1000000)
+Single Precision: 14.357358
+Double Precision: 14.392726722864989
+Percent Difference: 0.25%
+agree: true
+
+H(1000000) (Reverse Order)
+Single Precision: 14.392652
+Double Precision: 14.392726722865772
+Percent Difference: < 0.01%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(1000000): 14.357358
+H(1000000) (Reverse Order): 14.392652
+Percent Difference: 0.25%
+agree: true
+
+Double Precision
+H(1000000): 14.392726722864989
+H(1000000) (Reverse Order): 14.392726722865772
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #8
+
+Comparison of Single and Double Precision
+H(10000000)
+Single Precision: 15.403683
+Double Precision: 16.695311365857272
+Percent Difference: 8.05%
+agree: false
+
+H(10000000) (Reverse Order)
+Single Precision: 16.686031
+Double Precision: 16.695311365859965
+Percent Difference: 0.06%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(10000000): 15.403683
+H(10000000) (Reverse Order): 16.686031
+Percent Difference: 7.99%
+agree: false
+
+Double Precision
+H(10000000): 16.695311365857272
+H(10000000) (Reverse Order): 16.695311365859965
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #9
+
+Comparison of Single and Double Precision
+H(100000000)
+Single Precision: 15.403683
+Double Precision: 18.997896413852555
+Percent Difference: 20.90%
+agree: false
+
+H(100000000) (Reverse Order)
+Single Precision: 18.807919
+Double Precision: 18.997896413853447
+Percent Difference: 1.01%
+agree: true
+
+Comparison of Computation Orders
+Single Precision
+H(100000000): 15.403683
+H(100000000) (Reverse Order): 18.807919
+Percent Difference: 19.90%
+agree: false
+
+Double Precision
+H(100000000): 18.997896413852555
+H(100000000) (Reverse Order): 18.997896413853447
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #10
+
+Comparison of Single and Double Precision
+H(1000000000)
+Single Precision: 15.403683
+Double Precision: 21.30048150234855
+Percent Difference: 32.13%
+agree: false
+
+H(1000000000) (Reverse Order)
+Single Precision: 18.807919
+Double Precision: 21.30048150234615
+Percent Difference: 12.43%
+agree: false
+
+Comparison of Computation Orders
+Single Precision
+H(1000000000): 15.403683
+H(1000000000) (Reverse Order): 18.807919
+Percent Difference: 19.90%
+agree: false
+
+Double Precision
+H(1000000000): 21.30048150234855
+H(1000000000) (Reverse Order): 21.30048150234615
+Percent Difference: < 0.01%
+agree: true

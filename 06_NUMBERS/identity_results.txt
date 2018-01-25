@@ -1,0 +1,276 @@
+################################################################################
+Test #1
+x: 0.0
+y: 1.0
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: 0.0
+Percent Difference: 0.00%
+agree: true
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 0.0
+RHS: 0.0
+Percent Error: 0.00%
+agree: true
+
+Double Precision
+LHS: 0.0
+RHS: 0.0
+Percent Error: 0.00%
+agree: true
+################################################################################
+Test #2
+x: 0.0
+y: -1.0
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: 0.0
+Percent Difference: 0.00%
+agree: true
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 0.0
+RHS: 0.0
+Percent Error: 0.00%
+agree: true
+
+Double Precision
+LHS: 0.0
+RHS: 0.0
+Percent Error: 0.00%
+agree: true
+################################################################################
+Test #3
+x: 1.0
+y: 1.0
+
+Comparison of Single and Double Precision
+Single Precision: 1.0
+Double Precision: 1.0
+Percent Difference: 0.00%
+agree: true
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 1.0
+RHS: 1.0
+Percent Error: 0.00%
+agree: true
+
+Double Precision
+LHS: 1.0
+RHS: 1.0
+Percent Error: 0.00%
+agree: true
+################################################################################
+Test #4
+x: 12.1
+y: 12.1
+
+Comparison of Single and Double Precision
+Single Precision: 12.100098
+Double Precision: 12.099999999999909
+Percent Difference: < 0.01%
+agree: true
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 12.1
+RHS: 12.100098
+Percent Error: < 0.01%
+agree: true
+
+Double Precision
+LHS: 12.1
+RHS: 12.099999999999909
+Percent Error: < 0.01%
+agree: true
+################################################################################
+Test #5
+x: 123.21
+y: 123.21
+
+Comparison of Single and Double Precision
+Single Precision: 123.125
+Double Precision: 123.20999999996275
+Percent Difference: 0.07%
+agree: true
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 123.21
+RHS: 123.125
+Percent Error: 0.07%
+agree: true
+
+Double Precision
+LHS: 123.21
+RHS: 123.20999999996275
+Percent Error: < 0.01%
+agree: true
+################################################################################
+Test #6
+x: 1234.321
+y: 12345.4321
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: 1234.3210144042969
+Percent Difference: 200.00%
+agree: false
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 1234.321
+RHS: 0.0
+Percent Error: 100.00%
+agree: false
+
+Double Precision
+LHS: 1234.321
+RHS: 1234.3210144042969
+Percent Error: < 0.01%
+agree: true
+################################################################################
+Test #7
+x: 12345.4321
+y: 12345.4321
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: 12345.43212890625
+Percent Difference: 200.00%
+agree: false
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 12345.432
+RHS: 0.0
+Percent Error: 100.00%
+agree: false
+
+Double Precision
+LHS: 12345.4321
+RHS: 12345.43212890625
+Percent Error: < 0.01%
+agree: true
+################################################################################
+Test #8
+x: 123456.54321
+y: 123456.54321
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: 123456.5
+Percent Difference: 200.00%
+agree: false
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 123456.55
+RHS: 0.0
+Percent Error: 100.00%
+agree: false
+
+Double Precision
+LHS: 123456.54321
+RHS: 123456.5
+Percent Error: < 0.01%
+agree: true
+################################################################################
+Test #9
+x: 1234567.654321
+y: 1234567.654321
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: 1234432.0
+Percent Difference: 200.00%
+agree: false
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 1234567.6
+RHS: 0.0
+Percent Error: 100.00%
+agree: false
+
+Double Precision
+LHS: 1234567.654321
+RHS: 1234432.0
+Percent Error: 0.01%
+agree: true
+################################################################################
+Test #10
+x: 1.23456787654321E7
+y: 1.23456787654321E7
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: 1.2320768E7
+Percent Difference: 200.00%
+agree: false
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 1.2345679E7
+RHS: 0.0
+Percent Error: 100.00%
+agree: false
+
+Double Precision
+LHS: 1.23456787654321E7
+RHS: 1.2320768E7
+Percent Error: 0.20%
+agree: true
+################################################################################
+Test #11
+x: 1.2345678987654321E8
+y: 1.2345678987654321E8
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: 2.68435456E8
+Percent Difference: 200.00%
+agree: false
+
+Comparison of LHS and RHS
+Single Precision
+LHS: 1.23456792E8
+RHS: 0.0
+Percent Error: 100.00%
+agree: false
+
+Double Precision
+LHS: 1.2345678987654321E8
+RHS: 2.68435456E8
+Percent Error: 117.43%
+agree: false
+################################################################################
+Test #12
+x: -1.9263418214378932E8
+y: -3.1267389412946E7
+
+Comparison of Single and Double Precision
+Single Precision: 0.0
+Double Precision: -2.01326592E8
+Percent Difference: 200.00%
+agree: false
+
+Comparison of LHS and RHS
+Single Precision
+LHS: -1.92634176E8
+RHS: 0.0
+Percent Error: 100.00%
+agree: false
+
+Double Precision
+LHS: -1.9263418214378932E8
+RHS: -2.01326592E8
+Percent Error: 4.51%
+agree: true

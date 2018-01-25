@@ -1,0 +1,930 @@
+################################################################################
+Test #1
+a=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, ...]
+n=100
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 28.86607
+σ (Double Precision): 28.86607004772212
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 28.86607
+σ (Double Precision): 28.86607004772212
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 28.86607
+σ (Method Two): 28.86607
+Percent Difference: 0.00%
+agree: true
+
+Double Precision
+σ (Method One): 28.86607004772212
+σ (Method Two): 28.86607004772212
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #2
+a=[-722.5213206762352, 429.6076740701096, -188.6853198488002, ...]
+n=100
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 463.79425
+σ (Double Precision): 463.7942589877135
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 463.79428
+σ (Double Precision): 463.7942589877135
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 463.79425
+σ (Method Two): 463.79428
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 463.7942589877135
+σ (Method Two): 463.7942589877135
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #3
+a=[10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, ...]
+n=100
+c=10
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 28.86607
+σ (Double Precision): 28.86607004772212
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 28.86607
+σ (Double Precision): 28.86607004772212
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 28.86607
+σ (Method Two): 28.86607
+Percent Difference: 0.00%
+agree: true
+
+Double Precision
+σ (Method One): 28.86607004772212
+σ (Method Two): 28.86607004772212
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #4
+a=[-34.70444447560286, -51.3343414775389, 59.65901736206388, ...]
+n=100
+c=10
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 46.462086
+σ (Double Precision): 46.462081160398505
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 46.462082
+σ (Double Precision): 46.46208116039849
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 46.462086
+σ (Method Two): 46.462082
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 46.462081160398505
+σ (Method Two): 46.46208116039849
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #5
+a=[10000.0, 10001.0, 10002.0, 10003.0, 10004.0, 10005.0, 10006.0, ...]
+n=100
+c=10000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 28.86607
+σ (Double Precision): 28.86607004772212
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 28.977232
+σ (Double Precision): 28.86607004772212
+Percent Difference: 0.38%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 28.86607
+σ (Method Two): 28.977232
+Percent Difference: 0.38%
+agree: true
+
+Double Precision
+σ (Method One): 28.86607004772212
+σ (Method Two): 28.86607004772212
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #6
+a=[9386.933787935037, 10618.811358328026, 10827.098504221536, ...]
+n=100
+c=10000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 485.88452
+σ (Double Precision): 485.88451858070675
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 485.86285
+σ (Double Precision): 485.88451858072546
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 485.88452
+σ (Method Two): 485.86285
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 485.88451858070675
+σ (Method Two): 485.88451858072546
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #7
+a=[1000000.0, 1000001.0, 1000002.0, 1000003.0, 1000004.0, 1000005.0, ...]
+n=100
+c=1000000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 28.86607
+σ (Double Precision): 28.86607004772212
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 0.0
+σ (Double Precision): 28.86607004772212
+Percent Difference: 200.00%
+Agree: false
+
+Comparison of Methods
+Single Precision
+σ (Method One): 28.86607
+σ (Method Two): 0.0
+Percent Difference: 200.00%
+agree: false
+
+Double Precision
+σ (Method One): 28.86607004772212
+σ (Method Two): 28.86607004772212
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #8
+a=[999983.4291811995, 999766.2573319443, 1000143.4203708319, ...]
+n=100
+c=1000000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 145.7005
+σ (Double Precision): 145.70097894939772
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 289.63092
+σ (Double Precision): 145.70097856998078
+Percent Difference: 66.12%
+Agree: false
+
+Comparison of Methods
+Single Precision
+σ (Method One): 145.7005
+σ (Method Two): 289.63092
+Percent Difference: 66.12%
+agree: false
+
+Double Precision
+σ (Method One): 145.70097894939772
+σ (Method Two): 145.70097856998078
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #9
+a=[-10000.0, -9999.0, -9998.0, -9997.0, -9996.0, -9995.0, -9994.0, ...]
+n=100
+c=-10000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 28.86607
+σ (Double Precision): 28.86607004772212
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 28.8
+σ (Double Precision): 28.86607004772212
+Percent Difference: 0.23%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 28.86607
+σ (Method Two): 28.8
+Percent Difference: 0.23%
+agree: true
+
+Double Precision
+σ (Method One): 28.86607004772212
+σ (Method Two): 28.86607004772212
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #10
+a=[-9659.269753313512, -10171.823355578892, -9684.214693896593, ...]
+n=100
+c=-10000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 327.6089
+σ (Double Precision): 327.60882210858676
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 327.60562
+σ (Double Precision): 327.608822108581
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 327.6089
+σ (Method Two): 327.60562
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 327.60882210858676
+σ (Method Two): 327.608822108581
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #11
+a=[-1000000.0, -999999.0, -999998.0, -999997.0, -999996.0, -999995.0, ...]
+n=100
+c=-1000000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 28.86607
+σ (Double Precision): 28.86607004772212
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 289.63092
+σ (Double Precision): 28.86607004772212
+Percent Difference: 163.75%
+Agree: false
+
+Comparison of Methods
+Single Precision
+σ (Method One): 28.86607
+σ (Method Two): 289.63092
+Percent Difference: 163.75%
+agree: false
+
+Double Precision
+σ (Method One): 28.86607004772212
+σ (Method Two): 28.86607004772212
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #12
+a=[-999850.1587362834, -999883.5065993626, -1000004.1226541089, ...]
+n=100
+c=-1000000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 89.627716
+σ (Double Precision): 89.62976117244096
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 409.6
+σ (Double Precision): 89.62976190278539
+Percent Difference: 128.19%
+Agree: false
+
+Comparison of Methods
+Single Precision
+σ (Method One): 89.627716
+σ (Method Two): 409.6
+Percent Difference: 128.19%
+agree: false
+
+Double Precision
+σ (Method One): 89.62976117244096
+σ (Method Two): 89.62976190278539
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #13
+a=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, ...]
+n=1000
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 288.67593
+σ (Double Precision): 288.6749902572095
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 288.67438
+σ (Double Precision): 288.6749902572095
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 288.67593
+σ (Method Two): 288.67438
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 288.6749902572095
+σ (Method Two): 288.6749902572095
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #14
+a=[-203.8630671732193, -271.3992242251067, 262.01607035768586, ...]
+n=1000
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 317.51047
+σ (Double Precision): 317.5105415631025
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 317.51047
+σ (Double Precision): 317.5105415631024
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 317.51047
+σ (Method Two): 317.51047
+Percent Difference: 0.00%
+agree: true
+
+Double Precision
+σ (Method One): 317.5105415631025
+σ (Method Two): 317.5105415631024
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #15
+a=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, ...]
+n=10000
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 2886.7517
+σ (Double Precision): 2886.751331514372
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 2886.7515
+σ (Double Precision): 2886.751331514372
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 2886.7517
+σ (Method Two): 2886.7515
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 2886.751331514372
+σ (Method Two): 2886.751331514372
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #16
+a=[-801.7093938465292, 549.5345773414276, 822.032210133435, ...]
+n=10000
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 530.3703
+σ (Double Precision): 530.3696590824168
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 530.3696
+σ (Double Precision): 530.3696590824165
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 530.3703
+σ (Method Two): 530.3696
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 530.3696590824168
+σ (Method Two): 530.3696590824165
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #17
+a=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, ...]
+n=100000
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 28867.35
+σ (Double Precision): 28867.513458037913
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 28867.533
+σ (Double Precision): 28867.513458037905
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 28867.35
+σ (Method Two): 28867.533
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 28867.513458037913
+σ (Method Two): 28867.513458037905
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #18
+a=[-1.403490805026422, 87.81806688348632, -347.2568945858776, ...]
+n=100000
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 236.12076
+σ (Double Precision): 236.12228083424816
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 236.12076
+σ (Double Precision): 236.12228083424878
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 236.12076
+σ (Method Two): 236.12076
+Percent Difference: 0.00%
+agree: true
+
+Double Precision
+σ (Method One): 236.12228083424816
+σ (Method Two): 236.12228083424878
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #19
+a=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, ...]
+n=1000000
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 288626.0
+σ (Double Precision): 288675.1345958226
+Percent Difference: 0.02%
+Agree: true
+
+Method (2)
+σ (Single Precision): 288758.56
+σ (Double Precision): 288675.1345940234
+Percent Difference: 0.03%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 288626.0
+σ (Method Two): 288758.56
+Percent Difference: 0.05%
+agree: true
+
+Double Precision
+σ (Method One): 288675.1345958226
+σ (Method Two): 288675.1345940234
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #20
+a=[-675.4852316805197, -192.11121840461885, 454.3930708762666, ...]
+n=1000000
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 548.94403
+σ (Double Precision): 549.039923701792
+Percent Difference: 0.02%
+Agree: true
+
+Method (2)
+σ (Single Precision): 548.94025
+σ (Double Precision): 549.0399237017715
+Percent Difference: 0.02%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 548.94403
+σ (Method Two): 548.94025
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 549.039923701792
+σ (Method Two): 549.0399237017715
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #21
+a=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, ...]
+n=18
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 5.1881275
+σ (Double Precision): 5.188127472091127
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 5.1881275
+σ (Double Precision): 5.188127472091127
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 5.1881275
+σ (Method Two): 5.1881275
+Percent Difference: 0.00%
+agree: true
+
+Double Precision
+σ (Method One): 5.188127472091127
+σ (Method Two): 5.188127472091127
+Percent Difference: 0.00%
+agree: true
+################################################################################
+Test #22
+a=[169.05725327503228, 61.02784719663663, -101.76872030233653, ...]
+n=18
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 191.81215
+σ (Double Precision): 191.81215554289412
+Percent Difference: < 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 191.81215
+σ (Double Precision): 191.81215554289415
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 191.81215
+σ (Method Two): 191.81215
+Percent Difference: 0.00%
+agree: true
+
+Double Precision
+σ (Method One): 191.81215554289412
+σ (Method Two): 191.81215554289415
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #23
+a=[0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, ...]
+n=775585
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 223866.81
+σ (Double Precision): 223892.10426346242
+Percent Difference: 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 223899.95
+σ (Double Precision): 223892.10426388396
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 223866.81
+σ (Method Two): 223899.95
+Percent Difference: 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 223892.10426346242
+σ (Method Two): 223892.10426388396
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #24
+a=[5.7343805880562915, 6.449625582336322, -4.826452120562612, ...]
+n=775585
+c=0
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 4.04513
+σ (Double Precision): 4.045566894750091
+Percent Difference: 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 4.045114
+σ (Double Precision): 4.045566894750068
+Percent Difference: 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 4.04513
+σ (Method Two): 4.045114
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 4.045566894750091
+σ (Method Two): 4.045566894750068
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #25
+a=[10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0, 19.0, 20.0, ...]
+n=775585
+c=10
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 223866.8
+σ (Double Precision): 223892.10426346242
+Percent Difference: 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 223899.92
+σ (Double Precision): 223892.10426388404
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 223866.8
+σ (Method Two): 223899.92
+Percent Difference: 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 223892.10426346242
+σ (Method Two): 223892.10426388404
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #26
+a=[32.09348316998924, 44.438353973259595, -62.929907506254494, ...]
+n=775585
+c=10
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 43.867367
+σ (Double Precision): 43.87257783783111
+Percent Difference: 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 43.866444
+σ (Double Precision): 43.87257783783036
+Percent Difference: 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 43.867367
+σ (Method Two): 43.866444
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 43.87257783783111
+σ (Method Two): 43.87257783783036
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #27
+a=[100.0, 101.0, 102.0, 103.0, 104.0, 105.0, 106.0, 107.0, 108.0, 109.0, ...]
+n=775585
+c=100
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 223866.81
+σ (Double Precision): 223892.10426346242
+Percent Difference: 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 223899.83
+σ (Double Precision): 223892.10426388355
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 223866.81
+σ (Method Two): 223899.83
+Percent Difference: 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 223892.10426346242
+σ (Method Two): 223892.10426388355
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #28
+a=[202.88790169120222, 148.4084735690821, 151.4461422426856, ...]
+n=775585
+c=100
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 96.43239
+σ (Double Precision): 96.44587998617145
+Percent Difference: 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 96.412315
+σ (Double Precision): 96.44587998617823
+Percent Difference: 0.03%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 96.43239
+σ (Method Two): 96.412315
+Percent Difference: 0.02%
+agree: true
+
+Double Precision
+σ (Method One): 96.44587998617145
+σ (Method Two): 96.44587998617823
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #29
+a=[1000.0, 1001.0, 1002.0, 1003.0, 1004.0, 1005.0, 1006.0, 1007.0, ...]
+n=775585
+c=1000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 223866.81
+σ (Double Precision): 223892.10426346242
+Percent Difference: 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 223897.03
+σ (Double Precision): 223892.1042638797
+Percent Difference: < 0.01%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 223866.81
+σ (Method Two): 223897.03
+Percent Difference: 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 223892.10426346242
+σ (Method Two): 223892.1042638797
+Percent Difference: < 0.01%
+agree: true
+################################################################################
+Test #30
+a=[1038.9003428702888, 1267.7834011995244, 1031.9884905908607, ...]
+n=775585
+c=1000
+
+Comparison of Single and Double Precision
+Method (1)
+σ (Single Precision): 375.20258
+σ (Double Precision): 375.25092320087896
+Percent Difference: 0.01%
+Agree: true
+
+Method (2)
+σ (Single Precision): 375.16772
+σ (Double Precision): 375.25092320096263
+Percent Difference: 0.02%
+Agree: true
+
+Comparison of Methods
+Single Precision
+σ (Method One): 375.20258
+σ (Method Two): 375.16772
+Percent Difference: < 0.01%
+agree: true
+
+Double Precision
+σ (Method One): 375.25092320087896
+σ (Method Two): 375.25092320096263
+Percent Difference: < 0.01%
+agree: true
