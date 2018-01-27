@@ -88,4 +88,39 @@ public abstract class Puzzle {
 
         return true;
     }
+
+    /**
+     * Checks if the puzzle has been solved.
+     * 
+     * @return true if either of the coins are on the 'goal' square, 
+     * otherwise false.
+     */
+    public boolean isSolved() {
+        return c1.equals(GOAL) || c2.equals(GOAL);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int row = 0; row < squares.length; row++) {
+            for (int col = 0; col < squares[row].length; col++) {
+                if (c1.equals(new Point(row, col))) {
+                    sb.append("C1 ");   // One Space.
+                } else if (c2.equals(new Point(row, col))) {
+                    sb.append("C2 ");   // One space.
+                } else if (GOAL.equals(new Point(row, col))) {                    
+                    sb.append("*  ");   // Two spaces.
+                } else {
+                    sb.append("   "); // Three spaces.
+                }
+
+                sb.append(String.format("%-17s", squares[row][col].validDirections.toString()));
+            }
+
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
 }

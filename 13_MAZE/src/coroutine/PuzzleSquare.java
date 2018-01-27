@@ -1,7 +1,8 @@
 package coroutine;
 
 import java.awt.Point;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * PuzzleSquare
@@ -9,11 +10,14 @@ import java.util.ArrayList;
  * @author Anthony Dickson
  */
 public class PuzzleSquare {
-    ArrayList<Direction> validDirections = new ArrayList<>();
+    Set<Direction> validDirections = new HashSet<>();
+    final boolean isGoal;
     
-    public PuzzleSquare() {}
+    public PuzzleSquare() {
+        this(false);
+    }
 
-    public PuzzleSquare(ArrayList<Direction> validDirections) {
-        this.validDirections = validDirections;
+    public PuzzleSquare(boolean isGoal) {
+        this.isGoal = isGoal;
     }
 }
