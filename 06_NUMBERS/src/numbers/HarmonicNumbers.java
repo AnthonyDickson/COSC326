@@ -7,34 +7,14 @@ import java.util.*;
  * observe how computer stores and handle different numbers.
  */
 public class HarmonicNumbers {
-	private static int nTests = 0;
 	private static float spHN, spHNReverse;
 	private static double dpHN, dpHNReverse;
 
 	public static void runTest(int n) {
-		System.out.println("################################################################################");
-		System.out.println("Test #" + ++nTests); 
-
-		System.out.println("\nComparison of Single and Double Precision");
 		harmonicNumber(n);
-		System.out.println("");
 		harmonicNumberReverse(n);
-
-		double spDiff = Percentages.difference(spHN, spHNReverse);
-		double dpDiff = Percentages.difference(dpHN, dpHNReverse);
-
-		System.out.println("\nComparison of Computation Orders");
-		System.out.println("Single Precision");
-		System.out.println("H(" + n + "): " + spHN);
-		System.out.println("H(" + n + ") (Reverse Order): " + spHNReverse);
-		System.out.println("Percent Difference: " + Percentages.getString(spDiff));
-		System.out.println("agree: " + Percentages.isAcceptable(spDiff));
 		
-		System.out.println("\nDouble Precision");
-		System.out.println("H(" + n + "): " + dpHN);
-		System.out.println("H(" + n + ") (Reverse Order): " + dpHNReverse);
-		System.out.println("Percent Difference: " + Percentages.getString(dpDiff));
-		System.out.println("agree: " + Percentages.isAcceptable(dpDiff));
+		System.out.println(n + "\t" + spHN + "\t" + spHNReverse + "\t" + dpHN + "\t" + dpHNReverse);
 	}
 
   	public static void harmonicNumber(int n) {
@@ -48,14 +28,6 @@ public class HarmonicNumbers {
 
 		spHN = spSum;
 		dpHN = dpSum;
-		
-		double diff = Percentages.difference(spSum, dpSum);
-		
-		System.out.println("H(" + n + ")");
-		System.out.println("Single Precision: " + spSum);
-		System.out.println("Double Precision: " + dpSum);
-		System.out.println("Percent Difference: " + Percentages.getString(diff));
-		System.out.println("agree: " + Percentages.isAcceptable(diff));
 	}
 	
 	public static void harmonicNumberReverse(int n) {
@@ -69,19 +41,15 @@ public class HarmonicNumbers {
 		
 		spHNReverse = spSum;
 		dpHNReverse = dpSum;
-
-		double diff = Percentages.difference(spSum, dpSum);
-	
-		System.out.println("H(" + n + ") (Reverse Order)");
-		System.out.println("Single Precision: " + spSum);
-		System.out.println("Double Precision: " + dpSum);
-		System.out.println("Percent Difference: " + Percentages.getString(diff));
-		System.out.println("agree: " + Percentages.isAcceptable(diff));
 	}
 
   	public static void main(String args[]) {		
 		Scanner scanner = new Scanner(System.in);
 	  
+		System.out.println("Harmonic Numbers");
+		System.out.println("\tSingle Precision\t\tDouble Precision\t");
+		System.out.println("n\tH(n)\tH(n) (Reverse Order)\tH(n)\tH(n) (Reverse Order)");
+
 		while (scanner.hasNextInt()) {
 			try {   
 				runTest(scanner.nextInt());

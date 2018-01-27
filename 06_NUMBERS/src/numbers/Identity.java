@@ -3,28 +3,10 @@ package numbers;
 import java.util.*;
 
 public class Identity{
-    private static int nTests = 0;
+    private static Random rand = new Random(2018);
 
     public static void runTest(double x, double y) {
-        System.out.println("################################################################################");
-        System.out.println("Test #" + ++nTests);  
-        System.out.println("x: " + x);
-        System.out.println("y: " + y); 
-        
-        float sp = compute((float) x, (float) y);
-        double dp = compute(x, y);
-        double diff = Percentages.difference(sp, dp);
-        
-        System.out.println("\nComparison of Single and Double Precision");
-        System.out.println("Single Precision: " + sp);
-        System.out.println("Double Precision: " + dp);
-        System.out.println("Percent Difference: " + Percentages.getString(diff));
-        System.out.println("agree: " + Percentages.isAcceptable(diff));
-        
-        System.out.println("\nComparison of LHS and RHS");
-        testSP((float) x, (float) y);
-		System.out.println("");
-        testDP(x, y);         
+        System.out.println(x + "\t" + y + "\t" + compute((float) x, (float) y) + "\t" + compute(x, y));
     }
 
     public static float compute(float x, float y) {
@@ -35,32 +17,25 @@ public class Identity{
         return (((x / y) - (x * y)) * y + (x * y * y));
     }
 
-    public static <T> void testSP(float x, float y) {        
-        float LHS = x;
-        float RHS = compute(x, y);
-        double error = Percentages.error(LHS, RHS);
-        
-        System.out.println("Single Precision");
-        System.out.println("LHS: " + LHS);
-        System.out.println("RHS: " + RHS);
-        System.out.println("Percent Error: " + Percentages.getString(error));
-        System.out.println("agree: " + Percentages.isAcceptable(error));
+    public static double randomX(int max) {
+        return rand.nextDouble() * max;
     }
-    
-    public static void testDP(double x, double y) { 
-        double LHS = x;
-        double RHS = (((x / y) - (x * y)) * y + (x * y * y));
-        double error = Percentages.error(LHS, RHS);
-        
-        System.out.println("Double Precision");
-        System.out.println("LHS: " + LHS);
-        System.out.println("RHS: " + RHS);
-        System.out.println("Percent Error: " + Percentages.getString(error));
-        System.out.println("agree: " + Percentages.isAcceptable(error));
+
+    public static double randomY(int max) {
+        double y = randomX(max);
+
+        while (y == 0.0) {
+            y = randomX(max);
+        }
+
+        return y;
     }
 
     public static void main(String args[]){
         Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Identity");
+        System.out.println("x\ty\tSingle Precision RHS\tDouble Precision RHS");
         
         while (scanner.hasNextDouble()) {
             try {   
@@ -68,7 +43,13 @@ public class Identity{
             } catch (NumberFormatException e) {
                 System.out.println("x and y must be floating point values.");
             } 
-        }    
+        } 
+
+        for (int i = 1; i <= 10000000; i *= 10) {
+            for (int j = 1; j <= 10000000; j *= 10) {
+                runTest(randomX(i), randomY(j));
+            }
+        }
         
         scanner.close();
     }
