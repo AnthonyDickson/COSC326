@@ -1,11 +1,7 @@
 package coroutine;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import java.awt.Point;
-import java.util.ArrayDeque;
 
 /**
  * Solves coroutine puzzles.
@@ -15,19 +11,81 @@ import java.util.ArrayDeque;
 public class Solver {
     List<State> stateGraph = new ArrayList<>();
     Map<State, ArrayList<Edge>> adjacencyList = new HashMap<>();
+    Puzzle p;
+    ArrayDeque<Edge> solutionPath = new ArrayDeque<>();
+    boolean solved;
 
     /**
      * @param p The coroutine puzzle to solve.
      */
     public Solver(Puzzle p) {
-        initGraph(p);
+        this.p = p;
+        this.solved = false;
+        
+        initGraph();
         addEdges();
+    }
+
+    /**
+     * Attempts to solve the puzzle.
+     * If a solution was found, it will be saved in <code>solutionPath</code>.
+     * 
+     * @return true if the puzzle was solved successfully, otherwise false.
+     */
+    public boolean solve() {
+        Set<State> visited = new HashSet<>();
+        ArrayDeque<Point> prevC1 = new ArrayDeque<>();
+        ArrayDeque<Point> prevC2 = new ArrayDeque<>();
+        
+        while (solutionPath.size() <= p.movesToSolve) {
+            State curr = find(p.c1, p.c2);
+            visited.add(curr);
+            
+            if (curr.isSolved()) {
+                solved = true;
+                return true;
+            }
+            
+            Point coin = p.getCurrentCoin();
+            Point other = p.getOtherCoin();
+            boolean moved = false;
+            boolean found = false;
+            
+            for (Edge e : adjacencyList.get(curr)) {
+                if ((e.isC1 && coin.equals(e.from.c1)) || (!e.isC1 && coin.equals(e.from.c2))) {
+                    if (visited.contains(e.to)) {
+                        found = true;
+                        e.badEdge = true;
+                        continue;
+                    } 
+                    
+                    if (!e.badEdge) {
+                        moved = true;
+                        prevC1.add(new Point(p.c1));
+                        prevC2.add(new Point(p.c2));
+                        p.move(coin, e.dir);
+                        solutionPath.add(e);
+                        break;
+                    }
+                }
+            }
+
+            if (found && !moved) {
+                solutionPath.pollLast();
+                p.c1 = prevC1.pollLast();
+                p.c2 = prevC2.pollLast();                
+            } else if (!moved) {                
+                p.pass();
+            }
+        }
+        
+        return false;
     }
 
     /**
      * Create all possible board states.
      */
-    private void initGraph(Puzzle p) {
+    private void initGraph() {
         int nSquares = p.board.length * p.board.length;
 
         for (int i = 0; i < nSquares - 1; i++) {
@@ -79,7 +137,7 @@ public class Solver {
      * 
      * @param c1 The position of one coin.
      * @param c2 The position of the other coin.
-     * @return The found state.
+     * @return The found state, null if nothing found (shouldn't happen).
      */
     private State find(Point c1, Point c2) {
         for (State s : stateGraph) {
@@ -90,6 +148,27 @@ public class Solver {
         }
         
         return null;
+    }
+
+    public void printSolution() {
+        if (!solved) {
+            System.out.println("No solution was found.");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Solved in " + solutionPath.size() +  " turns!\n");
+        sb.append("Solution:\n");        
+        sb.append("START => ");
+
+        for (Edge e : solutionPath) {
+            sb.append(String.format("(%s %s) => ", (e.isC1) ? "C1" : "C2", e.dir));
+        }
+
+        sb.append("FINISH");
+
+        System.out.println(sb.toString());
     }
 
     @Override
@@ -134,11 +213,13 @@ public class Solver {
     }
 
     private class Edge {
+        boolean badEdge;
         boolean isC1;
         State from, to;
         Direction dir;
 
         public Edge(boolean isC1, State from, State to, Direction dir) {
+            this.badEdge = false;
             this.isC1 = isC1;
             this.from = from;
             this.to = to;
@@ -152,6 +233,17 @@ public class Solver {
     }
 
     public static void main(String[] args) {
-        System.out.println(new Solver(new Puzzle1()));
+        Solver s = new Solver(new Puzzle1());
+        s.solve();
+        s.printSolution();
+        s = new Solver(new Puzzle2());
+        s.solve();
+        s.printSolution();
+        s = new Solver(new Puzzle3());
+        s.solve();
+        s.printSolution();
+        s = new Solver(new Puzzle4());
+        s.solve();
+        s.printSolution();
     }
 }

@@ -56,6 +56,15 @@ public abstract class Puzzle {
         return (isC1Turn) ? c1 : c2;
     }
 
+    /**
+     * Get the position of the coin that isn't moving this turn.
+     * 
+     * @return the position of the coin that isn't moving this turn.
+     */
+    public Point getOtherCoin() {
+        return (isC1Turn) ? c2 : c1;
+    }
+
     /** 
      * Gets all the directions a coin can move in.
      * 
@@ -79,7 +88,7 @@ public abstract class Puzzle {
 
         return moves;
     }
-
+    
     /**
      * Move a coin from one square to another.
      * 
@@ -99,7 +108,16 @@ public abstract class Puzzle {
             c2 = p;
         }
 
+        isC1Turn = !isC1Turn;
+
         return true;
+    }
+
+    /** 
+     * Pass the current coin's turn.
+     */
+    public void pass() {
+        isC1Turn = !isC1Turn;
     }
 
     /**
@@ -108,7 +126,6 @@ public abstract class Puzzle {
     public boolean isValid(Point from, Direction dir) {
         Point dest = new Point(from);
         dest.translate(dir.asPoint.x, dir.asPoint.y);
-        
         // A coin may not share the same square.
         if (dest.equals(c1) || dest.equals(c2)) return false;
         // A coin may not move off the board.
