@@ -50,7 +50,7 @@ enum Direction {
             return "\u2198";
         }
     }, 
-    SW(new Point(-1, -1)) {
+    SW(new Point(-1, 1)) {
         @Override
         public String toString() {
             return "\u2199";

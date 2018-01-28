@@ -9,11 +9,18 @@ import java.awt.Point;
  * @author Anthony Dickson
  */
 public class Solver {
-    List<State> stateGraph = new ArrayList<>();
-    Map<State, ArrayList<Edge>> adjacencyList = new HashMap<>();
+    /** The puzzle to solve. */
     Puzzle p;
-    ArrayDeque<Edge> solutionPath = new ArrayDeque<>();
+    /** The graph containing all the possible states of the bard. */
+    List<State> stateGraph = new ArrayList<>();
+    /** The edges describing how states are linked. */
+    Map<State, ArrayList<Edge>> adjacencyList = new HashMap<>();
+    /** Whether or not this solver has solved the given puzzle. */
     boolean solved;
+    /** The edges traversed to get to a solution. */
+    ArrayDeque<Edge> solutionPath = new ArrayDeque<>();
+    /** The name of which coin was moved. */
+    Map<Edge, String> solutionPathNames = new HashMap<>();
 
     /**
      * @param p The coroutine puzzle to solve.
@@ -40,6 +47,10 @@ public class Solver {
         while (solutionPath.size() <= p.movesToSolve) {
             State curr = find(p.c1, p.c2);
             visited.add(curr);
+
+            System.out.println("Coin turn: " + ((p.isC1Turn) ? "C1" : "C2"));
+            System.out.println(curr);
+            System.out.println("Coin moves: " + p.getMoves((p.isC1Turn) ? p.c1 : p.c2));
             
             if (curr.isSolved()) {
                 solved = true;
@@ -47,7 +58,6 @@ public class Solver {
             }
             
             Point coin = p.getCurrentCoin();
-            Point other = p.getOtherCoin();
             boolean moved = false;
             boolean found = false;
             
@@ -61,20 +71,25 @@ public class Solver {
                     
                     if (!e.badEdge) {
                         moved = true;
+                        solutionPath.add(e);
+                        solutionPathNames.put(e, (p.isC1Turn) ? "C1" : "C2");
+
                         prevC1.add(new Point(p.c1));
                         prevC2.add(new Point(p.c2));
                         p.move(coin, e.dir);
-                        solutionPath.add(e);
                         break;
                     }
                 }
             }
 
             if (found && !moved) {
+                System.out.println("Backing up.");
                 solutionPath.pollLast();
                 p.c1 = prevC1.pollLast();
-                p.c2 = prevC2.pollLast();                
-            } else if (!moved) {                
+                p.c2 = prevC2.pollLast();    
+            } 
+
+            if (!moved) {                
                 p.pass();
             }
         }
@@ -163,7 +178,7 @@ public class Solver {
         sb.append("START => ");
 
         for (Edge e : solutionPath) {
-            sb.append(String.format("(%s %s) => ", (e.isC1) ? "C1" : "C2", e.dir));
+            sb.append(String.format("(%s %s) => ", solutionPathNames.get(e), e.dir));
         }
 
         sb.append("FINISH");
@@ -234,16 +249,23 @@ public class Solver {
 
     public static void main(String[] args) {
         Solver s = new Solver(new Puzzle1());
+        // System.out.println(s);
         s.solve();
         s.printSolution();
+        
         s = new Solver(new Puzzle2());
+        // System.out.println(s);
         s.solve();
         s.printSolution();
+        
         s = new Solver(new Puzzle3());
+        // System.out.println(s);
         s.solve();
         s.printSolution();
-        s = new Solver(new Puzzle4());
-        s.solve();
-        s.printSolution();
+        
+        // s = new Solver(new Puzzle4());
+        // System.out.println(s);
+        // s.solve();
+        // s.printSolution();
     }
 }
