@@ -9,6 +9,7 @@ import java.awt.Point;
  * @author Anthony Dickson
  */
 public class Solver {
+    enum Coin { ONE, TWO };
     /** The puzzle to solve. */
     Puzzle p;
     /** The graph containing all the possible states of the bard. */
@@ -40,21 +41,29 @@ public class Solver {
      * @return true if the puzzle was solved successfully, otherwise false.
      */
     public boolean solve() {
-        Set<State> visited = new HashSet<>();
+        Map<State, Set<Coin>> visited = new HashMap<>();
         ArrayDeque<Point> prevC1 = new ArrayDeque<>();
         ArrayDeque<Point> prevC2 = new ArrayDeque<>();
         
+        for (State s : stateGraph) {
+            visited.put(s, new HashSet<Coin>());
+        }
+        
         while (solutionPath.size() <= p.movesToSolve) {
             State curr = find(p.c1, p.c2);
-            visited.add(curr);
+            visited.get(curr).add((p.isC1Turn) ? Coin.ONE : Coin.TWO);
 
-            System.out.println("Coin turn: " + ((p.isC1Turn) ? "C1" : "C2"));
-            System.out.println(curr);
-            System.out.println("Coin moves: " + p.getMoves((p.isC1Turn) ? p.c1 : p.c2));
+            // System.out.println("Coin turn: " + ((p.isC1Turn) ? "C1" : "C2"));
+            // System.out.println(p);
+            // System.out.println("Coin moves: " + p.getMoves((p.isC1Turn) ? p.c1 : p.c2));
             
             if (curr.isSolved()) {
-                solved = true;
-                return true;
+                if (solutionPath.size() == p.movesToSolve) {
+                    solved = true;
+                    return true;
+                }
+
+                return false;
             }
             
             Point coin = p.getCurrentCoin();
@@ -63,7 +72,7 @@ public class Solver {
             
             for (Edge e : adjacencyList.get(curr)) {
                 if ((e.isC1 && coin.equals(e.from.c1)) || (!e.isC1 && coin.equals(e.from.c2))) {
-                    if (visited.contains(e.to)) {
+                    if (visited.get(e.to).contains((p.isC1Turn) ? Coin.ONE : Coin.TWO)) {
                         found = true;
                         e.badEdge = true;
                         continue;
@@ -77,21 +86,25 @@ public class Solver {
                         prevC1.add(new Point(p.c1));
                         prevC2.add(new Point(p.c2));
                         p.move(coin, e.dir);
+                        // System.out.println(p);
                         break;
                     }
                 }
             }
-
+            
             if (found && !moved) {
-                System.out.println("Backing up.");
-                solutionPath.pollLast();
+                // System.out.println("Backing up.");
+                solutionPathNames.remove(solutionPath.pollLast());
                 p.c1 = prevC1.pollLast();
-                p.c2 = prevC2.pollLast();    
-            } 
-
-            if (!moved) {                
+                p.c2 = prevC2.pollLast();   
+                // System.out.println(p);
+                p.pass();
+            } else if (!moved) {  
+                // System.out.println(((p.isC1Turn) ? "C1" : "C2") + " passes.");            
                 p.pass();
             }
+
+            // System.out.println("***************************************");
         }
         
         return false;
@@ -250,8 +263,8 @@ public class Solver {
     public static void main(String[] args) {
         Solver s = new Solver(new Puzzle1());
         // System.out.println(s);
-        s.solve();
-        s.printSolution();
+        // s.solve();
+        // s.printSolution();
         
         s = new Solver(new Puzzle2());
         // System.out.println(s);
@@ -260,12 +273,12 @@ public class Solver {
         
         s = new Solver(new Puzzle3());
         // System.out.println(s);
-        s.solve();
-        s.printSolution();
-        
-        // s = new Solver(new Puzzle4());
-        // System.out.println(s);
         // s.solve();
         // s.printSolution();
+        
+        s = new Solver(new Puzzle4());
+        // System.out.println(s);
+        s.solve();
+        s.printSolution();
     }
 }
