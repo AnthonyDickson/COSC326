@@ -3,7 +3,6 @@ package coroutine;
 import java.util.ArrayList;
 import java.awt.Point;
 
-
 /**
  * Puzzle
  *  
@@ -18,7 +17,7 @@ public abstract class Puzzle {
     /** How many moves it takes to solve the puzzle. */
     final int movesToSolve;
     /** A 3x3 board. */
-    PuzzleSquare[][] squares = new PuzzleSquare[3][3];
+    PuzzleSquare[][] board = new PuzzleSquare[3][3];
     /** The indicies of where the two coins are. */
     Point c1, c2;
     /** Indicates which coin should be moved. */
@@ -36,6 +35,28 @@ public abstract class Puzzle {
     }
 
     /** 
+     * Copy constructor.
+     * Note: <code>squares</code> is not cloned, changing <code>squares</code>
+     * will change <code>squares</code> for both the original and the copy. 
+     */
+    public Puzzle(Puzzle other) {
+        this.c1 = new Point(other.c1);
+        this.c2 = new Point(other.c2);
+        this.isC1Turn = other.isC1Turn;
+        this.movesToSolve = other.movesToSolve;
+        this.board = other.board;
+    }
+
+    /**
+     * Get the position of the coin to move this turn.
+     * 
+     * @return the position of the coin to move this turn.
+     */
+    public Point getCurrentCoin() {
+        return (isC1Turn) ? c1 : c2;
+    }
+
+    /** 
      * Gets all the directions a coin can move in.
      * 
      * @param from The position of the coin we want to move.
@@ -43,16 +64,17 @@ public abstract class Puzzle {
      */
     public ArrayList<Direction> getMoves(Point from) {
         ArrayList<Direction> moves = new ArrayList<>();
+        Point other = new Point();
 
         if (from.equals(c1)) {
-            from = c2;
+            other = c2;
         } else if (from.equals(c2)) {
-            from = c1;
+            other = c1;
         }
 
         // Get moves for c1.
-        for (Direction d : squares[from.y][from.x].validDirections) {
-            if (isValid(d.asPoint)) moves.add(d);
+        for (Direction d : board[other.y][other.x].validDirections) {
+            if (isValid(from, d)) moves.add(d);
         }
 
         return moves;
@@ -65,11 +87,11 @@ public abstract class Puzzle {
      * @param dir The direction to move the coin in.
      * @return Whether or not the coin was moved successfully.
      */
-    public boolean move(Point from, Point dir) {
+    public boolean move(Point from, Direction dir) {
+        if (!isValid(from, dir)) return false;
+        
         Point p = new Point(from);
-        p.translate(dir.x, dir.y);
-
-        if (!isValid(p)) return false;
+        p.translate(dir.asPoint.x, dir.asPoint.y);
 
         if (from.equals(c1)) {
             c1 = p;
@@ -80,12 +102,18 @@ public abstract class Puzzle {
         return true;
     }
 
-    public boolean isValid(Point p) {
+    /**
+     * Checks if a move is valid.
+     */
+    public boolean isValid(Point from, Direction dir) {
+        Point dest = new Point(from);
+        dest.translate(dir.asPoint.x, dir.asPoint.y);
+        
         // A coin may not share the same square.
-        if (p.equals(c1) || p.equals(c2)) return false;
+        if (dest.equals(c1) || dest.equals(c2)) return false;
         // A coin may not move off the board.
-        if ((p.x < 0 || p.x > 2) || (p.y < 0 || p.y > 2)) return false;
-
+        if ((dest.x < 0 || dest.x > 2) || (dest.y < 0 || dest.y > 2)) return false;
+        
         return true;
     }
 
@@ -103,19 +131,19 @@ public abstract class Puzzle {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        for (int row = 0; row < squares.length; row++) {
-            for (int col = 0; col < squares[row].length; col++) {
-                if (c1.equals(new Point(row, col))) {
+        for (int row = 0; row < board.length; row++) {
+            for (int col = 0; col < board[row].length; col++) {
+                if (c1.equals(new Point(col, row))) {
                     sb.append("C1 ");   // One Space.
-                } else if (c2.equals(new Point(row, col))) {
+                } else if (c2.equals(new Point(col, row))) {
                     sb.append("C2 ");   // One space.
-                } else if (GOAL.equals(new Point(row, col))) {                    
+                } else if (GOAL.equals(new Point(col, row))) {                    
                     sb.append("*  ");   // Two spaces.
                 } else {
                     sb.append("   "); // Three spaces.
                 }
 
-                sb.append(String.format("%-17s", squares[row][col].validDirections.toString()));
+                sb.append(String.format("%-17s", board[row][col].validDirections.toString()));
             }
 
             sb.append("\n");
