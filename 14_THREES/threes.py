@@ -1,4 +1,5 @@
 from collections import deque
+from math import gcd
 
 class Threes:
     """We are looking for sets of positive integers that satisfy the following 
@@ -16,22 +17,22 @@ class Threes:
     """
 
     @staticmethod
-    def gcd(a, b):
-        """Find the greatest common denominator of two integers.
-        
-        >>> Threes.gcd(8, 24)
-        8
-
-        >>> Threes.gcd(13, 27)
-        1
-        
-        """
-        while not b == 0:
-            if a > b:
-                a = a - b
-            else:
-                b = b - a
-        return a
+    def incrX():
+        """Find the first 70 sets ordered by increasing x, for x, y and z
+        and print them out"""
+        n = 0
+        for y, z in Threes.coprimes():
+            if n > 100000:
+                break
+            x = 0
+            while x < y:
+                if Threes.is_valid(x, y, z):
+                    print("z=%d x=%d y=%d" % (z, x, y))
+                elif Threes.is_valid(z, y, x):
+                    print("z=%d x=%d y=%d" % (x, z, y))
+                x += 1
+            n += 1            
+            
 
     @staticmethod
     def is_valid(x, y, z):
@@ -46,10 +47,10 @@ class Threes:
         >>> Threes.is_valid(11, 8, 13) 
         False
         """
-        if x**2 + y**2 != 1 + z**4:
+        if not (z < x and x < y):
             return False
 
-        if not (z < x and x < y):
+        if x**2 + y**2 != 1 + z**4:
             return False
 
         if gcd(x, y) != 1: 
@@ -65,7 +66,23 @@ class Threes:
 
     @staticmethod
     def coprimes():
-        """Generates coprime pairs."""
+        """Generates coprime pairs.
+        
+        >>> i = 0
+        >>> for m, n in Threes.coprimes():
+        ...     print(m, n)
+        ...     i += 1
+        ...     if i == 8:
+        ...         break
+        2 1
+        3 1
+        3 2
+        5 2
+        4 1
+        5 3
+        7 3
+        5 1
+        """
         queue = deque([[2, 1], [3, 1]])
 
         while True:
@@ -78,8 +95,9 @@ class Threes:
             queue.append([m + 2 * n, n])
 
 def main():
-    import doctest
-    doctest.testmod()
+    # import doctest
+    # doctest.testmod()
+    Threes.incrX()
 
 if __name__ == '__main__':
     main()
