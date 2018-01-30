@@ -22,13 +22,6 @@ import java.io.InputStream;
  */
 public class JoinUp {
     BST dict = new BST();
-    String start = "";
-    String end = "";
-
-    public JoinUp(String start, String end) {
-        this.start = start;
-        this.end = end;
-    }
 
     /**
      * Process input from stdin, and add the words in the input into the 
@@ -47,14 +40,46 @@ public class JoinUp {
     }
 
     /**
+     * Find the shortest sequences of joined up words that link 
+     * <code>start</code> and <code>end</code>, and output the results to 
+     * stdout.
+     * 
+     * @param start The word to start joining up from.
+     * @param end The last word to join up to.
+     */
+    public void run(String start, String end) {
+        ArrayList<String> singly = singlyJoined(start, end);
+        ArrayList<String> doubly = doublyJoined(start, end);
+
+        StringBuilder singlyOutput = new StringBuilder();
+        singlyOutput.append(singly.size());
+
+        for (String s : singly) {
+            singlyOutput.append(" " + s);
+        }
+
+        StringBuilder doublyOutput = new StringBuilder();
+        doublyOutput.append(doubly.size());
+
+        for (String s : doubly) {
+            doublyOutput.append(" " + s);
+        }
+
+        System.out.println(singlyOutput.toString());
+        System.out.println(doublyOutput.toString());
+    }
+
+    /**
      * Get the shortest sequence of joined up words that link a beginning word 
      * to an end word, where the common part is at least half as long as one of 
      * the two words.
      * 
      * @return The sequence of joined up words.
      */
-    public ArrayList<String> singlyJoined() {
-        return new ArrayList<String>();
+    public ArrayList<String> singlyJoined(String start, String end) {
+        ArrayList<String> seq = new ArrayList<>();
+        
+        return seq;
     }
 
     /**
@@ -64,8 +89,10 @@ public class JoinUp {
      * 
      * @return The sequence of joined up words.
      */
-    public ArrayList<String> doublyJoined() {
-        return new ArrayList<String>();
+    public ArrayList<String> doublyJoined(String start, String end) {
+        ArrayList<String> seq = new ArrayList<>();
+        
+        return seq;
     }
     
     private class BST {
@@ -127,10 +154,11 @@ public class JoinUp {
     
     public static void main(String[] args) {
         try {
-            JoinUp jup = new JoinUp(args[0], args[1]);
+            JoinUp jup = new JoinUp();
             jup.processInput(System.in);  
+            jup.run(args[0], args[1]);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Usage: java JoinUp <start word> <end word> < <dictionary file>");
+            System.out.println("Usage: java JoinUp <start word> <end word>");
         }
     }
 }
