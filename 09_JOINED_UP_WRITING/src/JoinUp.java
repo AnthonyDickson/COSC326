@@ -21,7 +21,8 @@ import java.io.InputStream;
  * @author Anthony Dickson
  */
 public class JoinUp {
-    BST dict = new BST();
+    // BST dict = new BST();
+    ArrayList<String> dict = new ArrayList<>();
 
     /**
      * Process input from stdin, and add the words in the input into the 
@@ -48,18 +49,17 @@ public class JoinUp {
      * @param end The last word to join up to.
      */
     public void run(String start, String end) {
-        ArrayList<String> singly = singlyJoined(start, end);
-        ArrayList<String> doubly = doublyJoined(start, end);
-
+        String[] singly = singlyJoined(start, end);
         StringBuilder singlyOutput = new StringBuilder();
-        singlyOutput.append(singly.size());
-
+        singlyOutput.append(singly.length);
+        
         for (String s : singly) {
             singlyOutput.append(" " + s);
         }
-
+        
+        String[] doubly = doublyJoined(start, end);
         StringBuilder doublyOutput = new StringBuilder();
-        doublyOutput.append(doubly.size());
+        doublyOutput.append(doubly.length);
 
         for (String s : doubly) {
             doublyOutput.append(" " + s);
@@ -76,10 +76,29 @@ public class JoinUp {
      * 
      * @return The sequence of joined up words.
      */
-    public ArrayList<String> singlyJoined(String start, String end) {
-        ArrayList<String> seq = new ArrayList<>();
+    public String[] singlyJoined(String start, String end) {
+        ArrayDeque<String> seq = new ArrayDeque<>();
+
+        seq.add(start);
+
+        while (true) {
+            String curr = seq.peekLast();
+            String suffix = curr.substring(curr.length() / 2);
+
+            for (String other : dict) {
+                String prefix = other.substring(0, other.length() / 2);
+
+                if (other.startsWith(suffix) || curr.endsWith(prefix)) {
+                    seq.add(other);
+                }
+            }
+
+            if (curr.equals(seq.peekLast())) {
+                break;
+            }
+        }
         
-        return seq;
+        return seq.toArray(new String[0]);
     }
 
     /**
@@ -89,10 +108,10 @@ public class JoinUp {
      * 
      * @return The sequence of joined up words.
      */
-    public ArrayList<String> doublyJoined(String start, String end) {
-        ArrayList<String> seq = new ArrayList<>();
+    public String[] doublyJoined(String start, String end) {
+        ArrayDeque<String> seq = new ArrayDeque<>();
         
-        return seq;
+        return seq.toArray(new String[0]);
     }
     
     private class BST {
@@ -100,18 +119,29 @@ public class JoinUp {
         BST left;
         BST right;
         
+        /** Create an empty BST. */
         public BST() {
             this.root = "";
             this.left = null;
             this.right = null;
         }
         
+        /** 
+         * Create a new BST with the root set to <code>key</code>.
+         * 
+         * @param key The value of root.
+         */
         public BST(String key) {
             this.root = key;
             this.left = null;
             this.right = null;
         }
         
+        /**
+         * Add a key to the BST.
+         * 
+         * @param key The key to add.
+         */
         void add(String key) {
             if (isEmpty()) {
                 root = key;
@@ -129,7 +159,33 @@ public class JoinUp {
                 }
             }
         }
+
+        /**
+         * Search the BST for a key that starts with <code>prefix</code>.
+         * 
+         * @param prefix The prefix to search for.
+         * @return The key that starts with <code>prefix</code>. 
+         * Returns <code>null</code> if not found.
+         */
+        String findPrefix(String prefix) {
+            if (isEmpty()) return null;
+
+            if (root.startsWith(prefix)) {
+                return root;
+            } else if (prefix.compareTo(root) < 0) {
+                return (left == null) ? null : left.findPrefix(prefix);
+            } else if (prefix.compareTo(root) > 0) {
+                return (right == null) ? null : right.findPrefix(prefix);
+            }
+
+            return null;
+        }
         
+        /**
+         * Check if this BST is empty.
+         * 
+         * @return true if empty, false otherwise.
+         */
         boolean isEmpty() {
             return this.root == "";
         }
