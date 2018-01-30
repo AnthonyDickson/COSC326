@@ -1,15 +1,71 @@
-import java.util.Scanner;
+import java.util.*;
+import java.io.InputStream;
 
 /**
  * JoinUp
+ * Say that two words join up if a proper suffix of one is a proper prefix of 
+ * the next. For instance the words “suffix” and “fixture” join up. For a pair 
+ * of joined up words, the suffix of one which is a prefix of the other will be
+ * called the common part. We specify two slight variations:
+ * singly joined the common part is at least half as long as one of the two 
+ * words, and doubly joined the common part is at least half as long as both words.
+ * 
+ * The basic problem will be to find, for a given “dictionary” a shortest sequence of joined
+ * up words that link a beginning word to an end word. For instance:
+ * bard ardent entire
+ * is a sequence linking “bard” to “entire” in which each pair is doubly joined. On the
+ * other hand,
+ * suffix fixture read
+ * is a singly joined sequence.
  * 
  * @author Anthony Dickson
  */
 public class JoinUp {
     BST dict = new BST();
+    String start = "";
+    String end = "";
 
-    void processLine(String line) {
-        dict.add(line);
+    public JoinUp(String start, String end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    /**
+     * Process input from stdin, and add the words in the input into the 
+     * dictionary.
+     * 
+     * @param input The input stream to read the input from.
+     */
+    public void processInput(InputStream input) {
+        Scanner in = new Scanner(input);
+
+        while (in.hasNext()) {
+            dict.add(in.next());
+        }
+
+        in.close();
+    }
+
+    /**
+     * Get the shortest sequence of joined up words that link a beginning word 
+     * to an end word, where the common part is at least half as long as one of 
+     * the two words.
+     * 
+     * @return The sequence of joined up words.
+     */
+    public ArrayList<String> singlyJoined() {
+        return new ArrayList<String>();
+    }
+
+    /**
+     * Get the shortest sequence of joined up words that link a beginning word 
+     * to an end word, where the common part is at least half as long as both 
+     * words.
+     * 
+     * @return The sequence of joined up words.
+     */
+    public ArrayList<String> doublyJoined() {
+        return new ArrayList<String>();
     }
     
     private class BST {
@@ -70,16 +126,11 @@ public class JoinUp {
     }
     
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-
-        JoinUp jup = new JoinUp();
-
-        while (in.hasNextLine()) {
-            jup.processLine(in.nextLine());
+        try {
+            JoinUp jup = new JoinUp(args[0], args[1]);
+            jup.processInput(System.in);  
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Usage: java JoinUp <start word> <end word> < <dictionary file>");
         }
-
-        System.out.println(jup.dict);
-
-        in.close();
     }
 }
