@@ -10,11 +10,11 @@ public class CountUp {
 	 * @param n The value of k in the formula for n choose k.
 	 * @return The simplified numerator terms.
 	 */
-	public static ArrayList<Long> numeratorTerms(long n, long k) {
-		ArrayList<Long> nums = new ArrayList<>();
+	public static List<Long> numeratorTerms(long n, long k) {
+		List<Long> nums = new ArrayList<>();
 		long bound;
 		
-		if (k > n / 2) {
+		if (k > n - k) {
 			bound = k;
 		} else {
 			bound = n - k;
@@ -34,11 +34,11 @@ public class CountUp {
 	 * @param n The value of k in the formula for n choose k.
 	 * @return The simplified denominator terms.
 	 */
-	public static ArrayList<Long> denominatorTerms(long n, long k) {
-		ArrayList<Long> nums = new ArrayList<>();
+	public static List<Long> denominatorTerms(long n, long k) {
+		List<Long> nums = new ArrayList<>();
 		long bound;
 		
-		if (k > n / 2) {
+		if (k > n - k) {
 			bound = n - k;
 		} else {
 			bound = k;
@@ -51,6 +51,27 @@ public class CountUp {
 		return nums;
 	}
 
+	public static List<Long> primeFactors(List<Long> nums) { 
+		List<Long> result = new ArrayList<>();
+
+		for (long n : nums) {
+			result.addAll(primeFactors(n));
+		}
+
+		return result;
+	}
+
+	public static List<Long> primeFactors(long n) {
+		List<Long> factors = new ArrayList<Long>();
+        for (long i = 2; i <= n; i++) {
+            while (n % i == 0) {
+                factors.add(i);
+                n /= i;
+            }
+        }
+        return factors;
+	}
+
 	/**
 	 * Factor out/cancel terms in the given fraction.
 	 * Modifies parameters directly.
@@ -58,13 +79,12 @@ public class CountUp {
 	 * @param numerator The terms in the numerator.
 	 * @param denominator The terms in the denominator.
 	 */
-	public static void factorTerms(ArrayList<Long> numerator, ArrayList<Long> denominator) {
+	public static void factorTerms(List<Long> numerator, List<Long> denominator) {
 		for (int i = 0; i < numerator.size(); i++) {
 			for (int j = 0; j < denominator.size(); j++) {
 				if (numerator.get(i) % denominator.get(j) == 0) {
 					numerator.set(i, numerator.get(i) / denominator.get(j));
 					denominator.set(j, 1L);
-					break;
 				}
 			}
 		}
@@ -77,7 +97,7 @@ public class CountUp {
 	 * @return The product/result of multiplying all the terms in 
 	 * <code>nums</code> together.
 	 */
-	public static long getProduct(ArrayList<Long> nums) {
+	public static long getProduct(List<Long> nums) {
 		long total = 1;
 
 		for (Long n : nums) {
@@ -89,14 +109,26 @@ public class CountUp {
 
     public static void main (String[] args){
         long n = Long.parseLong(args[0]);
-        long k = Long.parseLong(args[1]);
+		long k = Long.parseLong(args[1]);
 
 		// Get simplified numerator and denominator terms.
-		ArrayList<Long> numerator = numeratorTerms(n, k);
-		ArrayList<Long> denominator = denominatorTerms(n, k);
-
+		List<Long> numerator = numeratorTerms(n, k);
+		List<Long> denominator = denominatorTerms(n, k);
+		
+		System.out.println("Simplified Terms");
+		System.out.println(numerator);
+		System.out.println(denominator);
+		
+		System.out.println("Prime factorized denominator");
+		denominator = primeFactors(denominator);
+		System.out.println(numerator);
+		System.out.println(denominator);
+		
 		// Further simplify the numerator and denominator terms.
+		System.out.println("Factorized Terms");
 		factorTerms(numerator, denominator);
+		System.out.println(numerator);
+		System.out.println(denominator);
 
 		// Calculate numerator/denominator
 		try {
