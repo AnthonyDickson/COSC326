@@ -64,6 +64,7 @@ public class CountUp {
 				if (numerator.get(i) % denominator.get(j) == 0) {
 					numerator.set(i, numerator.get(i) / denominator.get(j));
 					denominator.set(j, 1L);
+					break;
 				}
 			}
 		}

@@ -3,14 +3,12 @@ package countup;
 import java.util.*;
 
 /**
- * Computes and prints n choose k up to the max value of a long.
- * Uses pascal's triangle to compute n choose k.
+ * Computes and prints C(n, k) up to the max value of a long.
+ * Uses pascal's triangle to compute C(n, k).
  * 
  * @author Anthony Dickson
  */
 public class CountUpPascal {
-	private static long MISSING_VALUE = -1L;
-
     public static void main (String[] args){
 		int n;
 		int k;
@@ -21,48 +19,37 @@ public class CountUpPascal {
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.out.println("Usage: java CountUp <n> <k>");
 			return;
-		} 
+        } 
+        
+        // Handle speical cases.
+        if (n == k || k == 0) {
+            System.out.println(1);
+            return;
+        }
+        
+        if (k == 1 || n - k == 1) {
+            System.out.println(n);
+            return;
+        }
 
-		// Stores the previous row and the current row of pascals triangle.
-		long[][] pascal = new long[2][n / 2 + 1];		
-		pascal[0][0] = 1L;
+        // Since C(n, k) is equivalent to C(n, n - k)
+        if (k > n - k) k = n - k;
 
-		// Generate pascal's triangle up to row n, using symmetry and reusing array rows.
+		long[] pascal = new long[k + 1];		
+        pascal[0] = 1L;
+        
+		// Generate pascal's triangle up to row n.
 		for (int i = 1; i <= n; i++) {
-			for (int j = 0; j <= i / 2; j++) {
-				long left, right;
-				if (j - 1 >= 0) {
-					left = pascal[(i + 1) % 2][j - 1];
-				} else {
-					left = 0;
-				}
-
-				if (i % 2 == 0 && pascal[(i + 1) % 2][j] == 0) {
-					right = left;
-				} else {
-					right = pascal[(i + 1) % 2][j];
-				}
-
-				// Mark values that can't be computed due to missing value(s).
-				if (left == MISSING_VALUE || right == MISSING_VALUE) {
-					pascal[i % 2][j] = MISSING_VALUE;
-					break;
-				}
-
-				try {
-					pascal[i % 2][j] = Math.addExact(left, right);
-				} catch (ArithmeticException e) {
-					pascal[i % 2][j] = MISSING_VALUE;
-				}	
+			for (int j = k; j > 0; j--) {
+                try {
+                    pascal[j] = Math.addExact(pascal[j], pascal[j - 1]);
+                } catch (ArithmeticException e) {
+                    System.out.println("> Float.MAX_VALUE");
+                    return;
+                }
 			}
-		}
+		}		
 		
-		if (k > n / 2) k = n - k;
-
-		if (pascal[n % 2][k] == MISSING_VALUE) {
-			System.out.println("> Float.MAX_VALUE");
-		} else {
-			System.out.println(pascal[n % 2][k]);	
-		}
-	}    
+        System.out.println(pascal[k]);
+    }
 }
