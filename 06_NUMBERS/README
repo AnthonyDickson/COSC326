@@ -1,11 +1,4 @@
-This includes a Makefile along with one class which has main().
-Compile code by running make command, and to execute generated
-binary please follow following instructions.
-
-For the report please find it in the report folder along with Latex file
-incase if you want to update the final report.
-
-This folder includes three different classes for three different problems.
+Three applications that explore single and double precision floating point numbers and their limitations.
 
 Harmonic Numbers.
 $ java numbers/HarmonicNumbers
