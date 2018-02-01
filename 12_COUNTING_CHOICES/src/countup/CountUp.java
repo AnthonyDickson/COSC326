@@ -2,7 +2,13 @@ package countup;
 
 import java.util.*;
 
+/**
+ * Computes C(n, k) and prints the result if it fits within a 64-bit integer.
+ * 
+ * @author Anthony Dickson, Alexis Barltrop
+ */
 public class CountUp {
+
 	/**
 	 * Get the numerator terms after cancelling out with denominator terms.
 	 * 
@@ -63,12 +69,14 @@ public class CountUp {
 
 	public static List<Long> primeFactors(long n) {
 		List<Long> factors = new ArrayList<Long>();
+
         for (long i = 2; i <= n; i++) {
             while (n % i == 0) {
                 factors.add(i);
                 n /= i;
             }
-        }
+		}
+		
         return factors;
 	}
 
@@ -114,21 +122,8 @@ public class CountUp {
 		// Get simplified numerator and denominator terms.
 		List<Long> numerator = numeratorTerms(n, k);
 		List<Long> denominator = denominatorTerms(n, k);
-		
-		System.out.println("Simplified Terms");
-		System.out.println(numerator);
-		System.out.println(denominator);
-		
-		System.out.println("Prime factorized denominator");
 		denominator = primeFactors(denominator);
-		System.out.println(numerator);
-		System.out.println(denominator);
-		
-		// Further simplify the numerator and denominator terms.
-		System.out.println("Factorized Terms");
 		factorTerms(numerator, denominator);
-		System.out.println(numerator);
-		System.out.println(denominator);
 
 		// Calculate numerator/denominator
 		try {
