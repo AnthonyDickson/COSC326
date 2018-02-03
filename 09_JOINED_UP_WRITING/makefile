@@ -1,5 +1,5 @@
-build: src/*.java
-	javac src/*.java -d .
+build: src/joinup/*.java
+	javac src/joinup/*.java -d .
 
 test:
-	java JoinUp suffix read < dict.txt
+	java joinup.JoinUp suffix read < dict.txt
