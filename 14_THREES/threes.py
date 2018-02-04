@@ -1,4 +1,6 @@
-from collections import deque
+from fractions import gcd
+import math
+import Queue
 
 class Threes:
     """We are looking for sets of positive integers that satisfy the following 
@@ -16,23 +18,57 @@ class Threes:
     """
 
     @staticmethod
-    def gcd(a, b):
-        """Find the greatest common denominator of two integers.
-        
-        >>> Threes.gcd(8, 24)
-        8
+    def incrX():
+        x = 1
 
-        >>> Threes.gcd(13, 27)
-        1
-        
-        """
-        while not b == 0:
-            if a > b:
-                a = a - b
-            else:
-                b = b - a
-        return a
+        results = Queue.PriorityQueue()
 
+        try:
+            while results.qsize() < 70: 
+                for z in range(int(math.sqrt(x)) + 1, x):
+                    y = math.sqrt(1 + z**4 - x**2)
+                    
+                    if y.is_integer() and Threes.is_valid(x, int(y), z):
+                        results.put((x, (x, int(y), z)))
+
+                x += 2
+        except KeyboardInterrupt:
+            pass
+        finally:
+            i = 0
+            
+            while not results.empty():
+                i += 1
+                x, y, z = results.get()[-1]
+                print("{} {} {} {}".format(i, x, y, z))
+                
+
+    @staticmethod
+    def incrZ():
+        x = 1
+        z = 1
+
+        results = Queue.PriorityQueue()
+
+        try:
+            while results.qsize() < 70: 
+                for x in range(z, z**2, 2):
+                    y = math.sqrt(1 + z**4 - x**2)
+                    
+                    if y.is_integer() and Threes.is_valid(x, int(y), z):
+                        results.put((x, (x, int(y), z)))
+
+                z += 2
+        except KeyboardInterrupt:
+            pass
+        finally:
+            i = 0
+            
+            while not results.empty():
+                i += 1
+                x, y, z = results.get()[-1]
+                print("{} {} {} {}".format(i, x, y, z))
+                
     @staticmethod
     def is_valid(x, y, z):
         """Check if the x, y and z values satisfy the following 
@@ -46,10 +82,10 @@ class Threes:
         >>> Threes.is_valid(11, 8, 13) 
         False
         """
-        if x**2 + y**2 != 1 + z**4:
-            return False
-
         if not (z < x and x < y):
+            return False        
+            
+        if x**2 + y**2 != 1 + z**4:
             return False
 
         if gcd(x, y) != 1: 
@@ -63,23 +99,12 @@ class Threes:
 
         return True
 
-    @staticmethod
-    def coprimes():
-        """Generates coprime pairs."""
-        queue = deque([[2, 1], [3, 1]])
-
-        while True:
-            m, n = queue.popleft()
-            
-            yield m, n
-
-            queue.append([2 * m - n, m])
-            queue.append([2 * m + n, m])
-            queue.append([m + 2 * n, n])
-
 def main():
-    import doctest
-    doctest.testmod()
+    #import doctest
+    #doctest.testmod()
+    Threes.incrX()
+    print()
+    Threes.incrZ()
 
 if __name__ == '__main__':
     main()
