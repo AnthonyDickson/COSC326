@@ -72,7 +72,9 @@ public class Dictionary {
      * Returns -1 if no such word was found.
      */
     public int findPrefix(String prefix, int i) {
-        while (entries.get(i).charAt(0) == prefix.charAt(0) && i < entries.size()) {
+        if (i < 0 || i >= entries.size()) return -1;
+
+        while (i < entries.size() && entries.get(i).charAt(0) == prefix.charAt(0)) {
             if (entries.get(i).startsWith(prefix)) return i;
             i++;
         }
@@ -101,6 +103,10 @@ public class Dictionary {
 
     public String get(int index) {
         return entries.get(index);
+    }
+
+    public int size() {
+        return entries.size();
     }
 
     @Override
