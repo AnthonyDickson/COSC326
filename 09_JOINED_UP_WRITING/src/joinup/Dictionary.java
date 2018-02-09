@@ -16,7 +16,9 @@ public class Dictionary {
         Scanner input = new Scanner(in);
 
         while (input.hasNext()) {
-            words.add(input.next());
+            words.add(input.next().toLowerCase()
+                                  .replaceAll("[^a-z]", ""));
+            // words.add(input.next());
         }
 
         input.close();
@@ -32,32 +34,19 @@ public class Dictionary {
      * Returns -1 if no such word was found.
      */
     public int findPrefix(String prefix) {
-        int i = 0;
         int lower = 0;
         int upper = entries.size() - 1;
+        int i = Collections.binarySearch(entries, prefix);
 
-        // System.out.println("Looking for word that starts with " + prefix);
-
-        // Find a word that starts with the same letter as the prefix.
-        while (lower <= upper) {
-            i = lower + (upper - lower) / 2;
-            
-            if (prefix.charAt(0) < entries.get(i).charAt(0)) upper = i - 1;
-            else if (prefix.charAt(0) > entries.get(i).charAt(0)) lower = i + 1;
-            else break;
-        }
-
-        if (lower > upper) return -1;
-
-        // System.out.println("Found word that starts with " + prefix.charAt(0) + ": " + entries.get(i));
+        if (i < 0) return -1;
         
         // Scan dictionary until we find the first word that starts with 
         // the same letter as the prefix.
         while (entries.get(i).compareTo(prefix) > 0 && i > 0) i--;
+        // Just incase we went too far.
+        while (entries.get(i).compareTo(prefix) < 0 && i < size() - 1) i++;
         
         if (i < 0) return -1;
-
-        // System.out.println("Found first word that comes before " + prefix.charAt(0) + ": " + entries.get(i));
         
         return findPrefix(prefix, i);
     } 
@@ -87,18 +76,7 @@ public class Dictionary {
     } 
     
     public int indexOf(String key) {
-        int lower = 0;
-        int upper = entries.size();
-        
-        while (lower <= upper) {
-            int mid = lower + (upper - lower) / 2;
-            
-            if (key.compareTo(entries.get(mid)) < 0) upper = mid - 1;
-            else if (key.compareTo(entries.get(mid)) > 0) lower = mid + 1;
-            else if (key.equals(entries.get(mid))) return mid;
-        }
-
-        return -1;
+        return Collections.binarySearch(entries, key);
     } 
 
     public String get(int index) {

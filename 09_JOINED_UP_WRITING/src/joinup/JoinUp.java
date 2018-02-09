@@ -1,30 +1,19 @@
 package joinup;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.io.InputStream;
 
 /**
- * JoinUp
- * Say that two words join up if a proper suffix of one is a proper prefix of 
- * the next. For instance the words “suffix” and “fixture” join up. For a pair 
- * of joined up words, the suffix of one which is a prefix of the other will be
- * called the common part. We specify two slight variations:
- * singly joined the common part is at least half as long as one of the two 
- * words, and doubly joined the common part is at least half as long as both words.
- * 
- * The basic problem will be to find, for a given “dictionary” a shortest sequence of joined
- * up words that link a beginning word to an end word. For instance:
- * bard ardent entire
- * is a sequence linking “bard” to “entire” in which each pair is doubly joined. On the
- * other hand,
- * suffix fixture read
- * is a singly joined sequence.
+ * Etude 9, Joined Up Writing.
  * 
  * @author Anthony Dickson
  */
 public class JoinUp {
-    // BST dict = new BST();
+    static enum LinkType { SINGLE, DOUBLE }
     Dictionary dict;
+    List<String> path = new ArrayList<>();
+    long updated = 0;
 
     /**
      * Construct JoinUp, creating a dictionary using input from stdin.
@@ -33,40 +22,17 @@ public class JoinUp {
         dict = new Dictionary(System.in);
     }
 
+    /**
+     * Find the shortest singly and doubly linked sequences starting from 
+     * <code>start</code> and ending with <code>end</code>, and prints the
+     * result to stdout.
+     * 
+     * @param start The string to start linking from.
+     * @param end The string that should be at the end of the sequence.
+     */
     public void run(String start, String end) {
-        System.out.println(start + " " + end);
-
-        // List<Integer> indexes = findSinglyLinked(start);
-        
-        // System.out.println("Singly linked words for " + start);
-        // for (int index : indexes) {
-        //     System.out.print(dict.get(index) + " ");
-        // }
-        // System.out.println();
-
-        // indexes = findDoublyLinked(start);
-
-        // System.out.println("Doubly linked words for " +start);
-        // for (int index : indexes) {
-        //     System.out.print(dict.get(index) + " ");
-        // }
-
-        // System.out.println();
-        
-        // List<Integer> indexes = findDoublyLinked("agent");
-        // for (int index : indexes) {
-        //     System.out.print(dict.get(index) + " ");
-        // }
-        // System.out.println();
-
-        System.out.println("Finding singly linked sequence...");
-        List<String> sl = shortestPath(start, end, true);
-        System.out.println("\nFinding doubly linked sequence...");
-        List<String> dl = shortestPath(start, end, false);
-        System.out.println();
-
-        System.out.println(sl.size() + " " + String.join(" ", sl));
-        System.out.println(dl.size() + " " + String.join(" ", dl));
+        search(start, end, LinkType.SINGLE);
+        search(start, end, LinkType.DOUBLE);
     }
     
     /**
@@ -74,11 +40,11 @@ public class JoinUp {
      * 
      * @param start The first word in the sequence.
      * @param end The last word in the sequence.
-     * @param singlyLinked Set to true if you want to search for singly linked
-     * words or false if you want to search for doubly linked words.
-     * @return The path that gives the shortest linked word sequence.
+     * @param type The type of linking to use (single/double).
+     * @return returns <code>true</code> if a path was found, 
+     * <code>false</code> otherwise. 
      */
-    private List<String> shortestPath(String start, String end, boolean singlyLinked) {
+    private boolean search(String start, String end, LinkType type) {
         Queue<Node> q = new PriorityQueue<>(new Comparator<Node>() {
             @Override
             public int compare(Node n1, Node n2) {
@@ -86,27 +52,26 @@ public class JoinUp {
             }
         });
         
-        Set<Node> explored = new HashSet<>();
+        long startTime = System.currentTimeMillis();
         Node source = new Node(start);
         Node goal = new Node(end);
+        Set<Node> explored = new HashSet<>();
         source.cost = 0;
         q.add(source);
 
         while (!q.isEmpty()) {
-            if (explored.size() % 100 == 0) System.out.println((100 * explored.size() / dict.size()) + "%");
-            if (explored.size() == dict.size()) return new ArrayList<String>();
+            // printProgress(startTime, explored);
 
             Node current = q.poll();
             explored.add(current);
 
-            if(current.value.equals(goal.value)) {
-                System.out.println("Found solution path: " + path(current));
-                return path(current);
+            if(current.equals(goal)) {
+                path = path(current);
+                System.out.println(path.size() + " " + String.join(" ", path));
+                return true;
             }
 
-            current.adj = getEdges(current, singlyLinked);
-
-            for(Edge e: current.adj) {
+            for(Edge e: current.getEdges(type)) {
                 Node child = e.target;
                 int cost = e.cost;
                 child.cost = current.cost + cost;
@@ -114,103 +79,31 @@ public class JoinUp {
                 if(!explored.contains(child) && !q.contains(child)){
                     child.parent = current;
                     q.add(child);
-
-                    // System.out.println(path(current));
-                    // System.out.println(child);
-                    // System.out.println(q);
-                    // System.out.println();
-                } else if((q.contains(child)) && (child.cost > current.cost + cost)){
-                    child.parent = current;
-
-                    // the next two calls decrease the key of the node in the queue
-                    q.remove(child);
-                    q.add(child);
-                }
+                } 
             }
         }
 
-        return new ArrayList<String>();
+        return false;
     }
 
-    private List<Edge> getEdges(Node n, boolean singlyLinked) {
-        List<Edge> adj = new ArrayList<>();
-        List<Integer> indicies;
-
-        if (singlyLinked) {
-            indicies = findSinglyLinked(n.value);
-        } else {
-            indicies = findDoublyLinked(n.value);
+	private void printProgress(long startTime, Set<Node> explored) {
+		if (System.currentTimeMillis() - updated > 100) {
+            double percentDone = 100.0 *  explored.size() / dict.size();
+            long eta = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime);
+            eta = (long) ((eta / percentDone) * (100 - percentDone));
+            long seconds = eta % 60;
+            long minutes = (long) (eta / 60.0);
+            System.err.format("\rSearched %.2f%% of the dictionary. Approx. time remaining: %2dm %2ds.", percentDone, minutes, seconds);
+            updated = System.currentTimeMillis();
         }
-
-        for (int i : indicies) {
-            Edge e = new Edge(new Node(dict.get(i)), 1);
-            adj.add(e);
-        }
-
-        return adj;
-    } 
-
-    /**
-     * Returns the dictionary indicies of words that are singly linked with 
-     * <code>word</code>, i.e. words where the common part between the end
-     * of <code>word</code> and the start of the other word is at least half as
-     * long as one of the words.
-     * 
-     * @param word The word to link with.
-     * @return The dictionary indicies of the words that are singly linked with
-     * <code>word</code>.
-     */
-    private List<Integer> findSinglyLinked(String word) {
-        List<Integer> words = new ArrayList<>();
-
-        int length = 1;
-
-        while (length < word.length()) {
-            String prefix = word.substring(word.length() - length);
-            int i = dict.findPrefix(prefix);
-            
-            while (i > -1) {
-                if (length >= dict.get(i).length() / 2 || length >= word.length() / 2) {
-                    words.add(i);
-                }
-
-                i = dict.findPrefix(prefix, i + 1);
-            }
-
-            length++;
-        }
-
-        return words;
-    }
-
-    /**
-     * Returns the dictionary indicies of words that are doubly linked with 
-     * <code>word</code>, i.e. words where the common part between the end
-     * of <code>word</code> and the start of the other word is at least half as
-     * long as both words.
-     * 
-     * @param word The word to link with.
-     * @return The dictionary indicies of the words that are doubly linked with
-     * <code>word</code>.
-     */
-    private List<Integer> findDoublyLinked(String word) {
-        List<Integer> words = new ArrayList<>();
-
-        for (int index : findSinglyLinked(word)) {
-            String left = word;
-            String right = dict.get(index);
-
-            if (left.length() > 2 * right.length() || right.length() > 2 * left.length()) continue;
-
-            int length = Math.max(left.length(), right.length()) / 2;
-            if (right.startsWith(left.substring(left.length() - length))) words.add(index);
-        }
-
-        return words;
-    }
-
+	}
+    
     /**
      * Gets the words in the solution path.
+     * 
+     * @param from The node at the end of the path.
+     * @return list of the node values that leads from the start of the path to
+     * the node <code>from</code>.
      */
     private List<String> path(Node from) {
         List<String> path = new ArrayList<>();
@@ -219,6 +112,76 @@ public class JoinUp {
         
         Collections.reverse(path);
         return path;
+    }
+
+    /**
+     * Returns the dictionary indicies of words that are linked with 
+     * <code>word</code>, i.e. words where the common part between the end
+     * of <code>word</code> and the start of the other word is at least half as
+     * long as one or both of the words.
+     * 
+     * @param word The word to link with.
+     * @param type The type of link to use (single/double).
+     * @return The dictionary indicies of the words that are linked with
+     * <code>word</code>.
+     */
+    private List<String> findLinked(String word, LinkType type) {
+        List<String> words = new ArrayList<>();
+        
+        for (int length = 0; length < word.length(); length++) {
+            String prefix = word.substring(length);
+            int i = dict.findPrefix(prefix);
+            
+            while (i > -1) {
+                String other = dict.get(i);
+                
+                if (type == LinkType.SINGLE && isSinglyLinked(word, other, prefix)) {
+                    words.add(other);
+                } 
+                else if (type == LinkType.DOUBLE && isDoublyLinked(word, other, prefix)) {
+                    words.add(other);
+                }
+                
+                i = dict.findPrefix(prefix, i + 1);
+            }
+        }
+        
+        return words;
+    }
+
+    /**
+     * Check whether or not <code>a</code> and <code>b</code>
+     * are singly linked by <code>commonPart</code>.
+     * 
+     * @param a The first string to check.
+     * @param b The other string to check.
+     * @param commonPart The substring that is common between <code>a</code>
+     * and <code>b</code>.
+     * @return <code>true</code> if <code>a</code> and <code>b</code> are 
+     * singly linked, <code>false</code> otherwise.
+     */
+    private boolean isSinglyLinked(String a, String b, String commonPart) {
+        if (commonPart.length() * 2 >= a.length() || commonPart.length() * 2 >= b.length()) return true;
+        
+        return false;
+    }
+
+    /**
+     * Check whether or not <code>a</code> and <code>b</code>
+     * are doubly linked by <code>commonPart</code>.
+     * 
+     * @param a The first string to check.
+     * @param b The other string to check.
+     * @param commonPart The substring that is common between <code>a</code>
+     * and <code>b</code>.
+     * @return <code>true</code> if <code>a</code> and <code>b</code> are 
+     * doubly linked, <code>false</code> otherwise.
+     */
+    private boolean isDoublyLinked(String a, String b, String commonPart) {
+        if (commonPart.length() * 2 < a.length()) return false;
+        if (commonPart.length() * 2 < b.length()) return false;
+
+        return true;
     }
      
     private class Node {
@@ -230,8 +193,19 @@ public class JoinUp {
         public Node(String value) {
             this.value = value;
             this.parent = null;
-            int cost = Integer.MAX_VALUE;
+            this.cost = Integer.MAX_VALUE;
         }
+
+        public List<Edge> getEdges(LinkType type) {
+            adj.clear();
+
+            for (String word : findLinked(value, type)) {
+                Edge e = new Edge(new Node(word), 1);
+                adj.add(e);
+            }
+
+            return adj;
+        } 
 
         @Override
         public int hashCode() {
@@ -245,12 +219,17 @@ public class JoinUp {
         }
 
         @Override
+        public boolean equals(Object obj) {
+            return value.equals(((Node) obj).value);
+        }
+
+        @Override
         public String toString() {
             return value;
         }
     }
 
-    public class Edge {
+    private class Edge {
         final int cost;
         final Node target;
 
