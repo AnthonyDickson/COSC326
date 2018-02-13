@@ -1,7 +1,6 @@
 package joinup;
 
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.io.InputStream;
 
 /**
@@ -13,6 +12,7 @@ public class JoinUp {
     static enum LinkType { SINGLE, DOUBLE }
     Dictionary dict;
     List<String> path = new ArrayList<>();
+    Set<Node> explored = new HashSet<>();
     long updated = 0;
 
     /**
@@ -32,7 +32,9 @@ public class JoinUp {
      */
     public void run(String start, String end) {
         search(start, end, LinkType.SINGLE);
+        System.out.println(path.size() + " " + String.join(" ", path));
         search(start, end, LinkType.DOUBLE);
+        System.out.println(path.size() + " " + String.join(" ", path));
     }
     
     /**
@@ -45,58 +47,47 @@ public class JoinUp {
      * <code>false</code> otherwise. 
      */
     private boolean search(String start, String end, LinkType type) {
-        Queue<Node> q = new PriorityQueue<>(new Comparator<Node>() {
-            @Override
-            public int compare(Node n1, Node n2) {
-                return n1.cost - n2.cost;
-            }
-        });
-        
-        long startTime = System.currentTimeMillis();
+        Queue<Node> q = new ArrayDeque<>();        
         Node source = new Node(start);
         Node goal = new Node(end);
-        Set<Node> explored = new HashSet<>();
-        source.cost = 0;
+        explored.clear();
+        path.clear();
         q.add(source);
-
+        int i = 0;
+        
         while (!q.isEmpty()) {
-            // printProgress(startTime, explored);
-
+            i++;
             Node current = q.poll();
             explored.add(current);
 
+            System.err.println("\nIteration #: " + i);
+            System.err.println("Queue size: " + q.size());
+            System.err.println("Explored count: " + explored.size());
+            System.err.println("Queue size + explored count = " + (q.size() + explored.size()));
+            System.err.println("Queue size + explored count <= dictionary size: " + (q.size() + explored.size() <= dict.size()));
+            //if (q.size() > dict.size()) return false;
+
             if(current.equals(goal)) {
                 path = path(current);
-                System.out.println(path.size() + " " + String.join(" ", path));
                 return true;
             }
+            
 
-            for(Edge e: current.getEdges(type)) {
-                Node child = e.target;
-                int cost = e.cost;
-                child.cost = current.cost + cost;
-
+            long startTime = System.currentTimeMillis();
+            
+            for(Node child: current.getEdges(type)) {                
                 if(!explored.contains(child) && !q.contains(child)){
                     child.parent = current;
                     q.add(child);
-                } 
+                }
             }
+
+            long endTime = System.currentTimeMillis();
+            System.err.println("Iterations took " + (endTime - startTime) + "ms.");
         }
 
         return false;
     }
-
-	private void printProgress(long startTime, Set<Node> explored) {
-		if (System.currentTimeMillis() - updated > 100) {
-            double percentDone = 100.0 *  explored.size() / dict.size();
-            long eta = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime);
-            eta = (long) ((eta / percentDone) * (100 - percentDone));
-            long seconds = eta % 60;
-            long minutes = (long) (eta / 60.0);
-            System.err.format("\rSearched %.2f%% of the dictionary. Approx. time remaining: %2dm %2ds.", percentDone, minutes, seconds);
-            updated = System.currentTimeMillis();
-        }
-	}
     
     /**
      * Gets the words in the solution path.
@@ -187,21 +178,19 @@ public class JoinUp {
     private class Node {
         final String value;
         Node parent;
-        int cost;
-        List<Edge> adj = new ArrayList<>();
+        List<Node> adj = new ArrayList<>();
 
         public Node(String value) {
             this.value = value;
             this.parent = null;
-            this.cost = Integer.MAX_VALUE;
         }
 
-        public List<Edge> getEdges(LinkType type) {
+        public List<Node> getEdges(LinkType type) {
             adj.clear();
+            
 
             for (String word : findLinked(value, type)) {
-                Edge e = new Edge(new Node(word), 1);
-                adj.add(e);
+                adj.add(new Node(word));
             }
 
             return adj;
@@ -226,16 +215,6 @@ public class JoinUp {
         @Override
         public String toString() {
             return value;
-        }
-    }
-
-    private class Edge {
-        final int cost;
-        final Node target;
-
-        public Edge(Node target, int cost) {
-            this.target = target;
-            this.cost = cost;
         }
     }
 

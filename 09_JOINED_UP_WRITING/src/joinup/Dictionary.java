@@ -36,7 +36,28 @@ public class Dictionary {
     public int findPrefix(String prefix) {
         int lower = 0;
         int upper = entries.size() - 1;
-        int i = Collections.binarySearch(entries, prefix);
+        int i = -1;
+
+        while (lower <= upper) {
+            int mid = (lower + upper) / 2;
+            String entry = get(mid);
+            String target = prefix;
+
+            if (entry.length() > target.length()) {
+                entry = entry.substring(0, target.length());
+            } else if (target.length() > entry.length()) {
+                target = target.substring(0, entry.length());
+            }
+
+            if (entry.compareTo(target) < 0) {
+                lower = mid + 1;
+            } else if (entry.compareTo(target) > 0) {
+                upper = mid - 1;
+            } else {
+                i = mid;
+                break;
+            }
+        }
 
         if (i < 0) return -1;
         
@@ -63,9 +84,8 @@ public class Dictionary {
     public int findPrefix(String prefix, int i) {
         if (i < 0 || i >= entries.size()) return -1;
 
-        while (i < entries.size() && entries.get(i).charAt(0) == prefix.charAt(0)) {
-            if (entries.get(i).startsWith(prefix)) return i;
-            i++;
+        if (entries.get(i).startsWith(prefix)) {
+            return i;
         }
 
         return -1;
