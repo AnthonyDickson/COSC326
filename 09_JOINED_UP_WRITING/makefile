@@ -1,9 +1,5 @@
-build: src/joinup/*.java
-	javac src/joinup/*.java -d .
-
-test:
-	java joinup.JoinUp suffix read < dict.txt
+build: src/*.cpp
+	g++ -std=c++11 src/*.cpp -o JoinUp -W -Wall -pedantic
 
 clean:
-	rm -rf *.class
-	rm -rf joinup
+	rm ./JoinUp
