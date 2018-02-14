@@ -1,0 +1,10 @@
+Three applications that explore single and double precision floating point numbers and their limitations.
+
+Harmonic Numbers.
+$ java numbers/HarmonicNumbers
+
+Standard Deviation.
+$ java numbers/StandardDeviation
+
+Identity Numbers.
+$ java numbers/Identity
