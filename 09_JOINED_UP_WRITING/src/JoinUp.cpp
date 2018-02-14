@@ -35,13 +35,6 @@ bool JoinUp::search(string start, string end, LinkType type) {
         Node* curr = q.front();
         q.pop();
 
-        // if (curr->parent != nullptr) {
-        //     cout << "Current: " << curr->parent->value << " --> " << curr->value << endl;
-        // } else {
-        //     cout << "Current: " << curr->value << endl;
-        // }
-        // cout << "Current: " << curr->value << endl;
-
         if (curr->value == goal.value) {
             vector<Node*> solutionPath = path(curr);
             printSolution(&solutionPath);
@@ -75,7 +68,7 @@ vector<Node*> JoinUp::findLinked(string word, LinkType type) {
         if (index > -1) {
             string other = dict[index].value;
 
-            while (startsWith(other, prefix) && index < (signed int) dict.size()) {
+            while (startsWith(other, prefix) && index < (signed int) dict.size() - 1) {
                 if (type == LinkType::Single && 
                     isSinglyLinked(word, other, prefix)) {
                     linked.push_back(&dict[index]);
