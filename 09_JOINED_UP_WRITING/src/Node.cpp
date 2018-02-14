@@ -1,6 +1,6 @@
 #include "Node.h"
 
-Node::Node(std::string value="noname") {
+Node::Node(string value) {
     this->value = value;
     this->parent = nullptr;
 }

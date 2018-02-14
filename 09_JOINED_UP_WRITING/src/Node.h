@@ -3,13 +3,15 @@
 
 #include <string>
 
+using namespace std;
+
 class Node {
     public:
-        std::string value;
+        string value;
         Node* parent;
 
     public:
-        Node(std::string value);
+        Node(string value);
 };
 
 #endif
