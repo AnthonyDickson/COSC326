@@ -20,11 +20,11 @@ JoinUp::JoinUp() {
     }
 }
 
-JoinUp::~JoinUp() {}
-
 bool JoinUp::search(string start, string end, LinkType type) {
     Node source(start);
     Node goal(end);
+    dict.push_back(goal);
+
     queue<Node*> q;
     unordered_set<Node*> visited;
     unordered_set<Node*> explored;
@@ -35,16 +35,16 @@ bool JoinUp::search(string start, string end, LinkType type) {
         Node* curr = q.front();
         q.pop();
 
-        if (curr->value == goal.value) {
-            vector<Node*> solutionPath = path(curr);
+        if (isLinkedWith(curr->value, goal.value, type)) {
+            goal.parent = curr;
+            vector<Node*> solutionPath = path(&goal);
             printSolution(&solutionPath);
             return true;
         }
 
         for (Node* child : findLinked(curr->value, type)) {
             if (explored.find(child) == explored.end() && 
-                visited.find(child) == visited.end() &&
-                child->value != start) {
+                visited.find(child) == visited.end()) {
                 child->parent = curr;
                 q.push(child);
                 visited.insert(child);
@@ -55,6 +55,17 @@ bool JoinUp::search(string start, string end, LinkType type) {
     }
     
     cout << 0 << endl;
+    return false;
+}
+
+bool JoinUp::isLinkedWith(string a, string b, LinkType type) {
+    for (unsigned int i = 1; i < a.length(); i++) {
+        if (startsWith(b, a.substr(i))) {
+            if (type == LinkType::Single && isSinglyLinked(a, b, a.substr(i))) return true;
+            else if (type == LinkType::Double && isDoublyLinked(a, b, a.substr(i))) return true;
+        }
+    }
+
     return false;
 }
 
