@@ -1,1 +1,1 @@
-COSC326 Summer School 2018, Individual and Pair Work.
+COSC326 Summer School 2018.
